@@ -1,6 +1,7 @@
 package mechanics.rb2d;
 
 import static java.lang.Math.cos;
+import static java.lang.Math.signum;
 import static java.lang.Math.sin;
 
 import de.physolator.usr.*;
@@ -16,11 +17,11 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 
 public class RigidBody {
-	
+
 	@Ignore
-	private static int count; 
+	private static int count;
 	@Ignore
-	public int uid; 
+	public int uid;
 
 	@V(unit = "kg")
 	public double m;
@@ -47,12 +48,27 @@ public class RigidBody {
 	@V(unit = "kg*m/s")
 	public double E_rb;
 
+	@V(unit = "N")
+	public Vector2D Fg = new Vector2D();
+	@V(unit = "N")
+	public Vector2D Fh = new Vector2D();
+	@V(unit = "N")
+	public Vector2D Fr = new Vector2D();
+	@V(unit = "N")
+	public Vector2D Fn = new Vector2D();
+	@V(unit = "N")
+	public Vector2D Fres = new Vector2D();
+	@V(unit = "N")
+	public Vector2D Fhr = new Vector2D();
+
 	@Ignore
 	public int color = Color.make(0.5, 0.5, 0.5);
 	@Ignore
 	public AbstractShape shape;
 
 	public BodyState state;
+
+	public BodyDirection direction;
 	@Ignore
 	public boolean visible = true;
 	@Ignore
@@ -61,7 +77,7 @@ public class RigidBody {
 	public RigidBody impactPartner_before;
 
 	public boolean dynamic;
-	
+
 	public RigidBody(double m, Vector2D r, Vector2D v, Vector2D a, double I, double phi, double omega, double alpha,
 			AbstractShape shape) {
 		this(m, r, v, a, I, phi, omega, alpha, true, shape);
@@ -96,19 +112,40 @@ public class RigidBody {
 		if (!dynamic) {
 			a.set(0, 0);
 		}
+
 		if (state == BodyState.STOPPED) {
 			v.set(0, 0);
 			a.set(0, 0);
 			omega = 0;
 			alpha = 0;
+			direction = BodyDirection.NONE;
+		}
+		if (state == BodyState.ROLLING) {
+		
+			Fr.x = Math.abs(Fr.x) * signum(-v.x);
+			Fr.y = Math.abs(Fr.y) * signum(-v.y);
+			if (v.x > 0)
+				direction = BodyDirection.RIGHT;
+			else if (v.x < 0)
+				direction = BodyDirection.LEFT;
+
+			if (direction == BodyDirection.LEFT) {
+				omega = v.abs() / shape.getRadius();
+			} else if (direction == BodyDirection.RIGHT) {
+				omega = -v.abs() / shape.getRadius();
+			}
+			
+			if (direction == BodyDirection.LEFT && v.x > 0 || direction == BodyDirection.RIGHT && v.x < 0) {
+				if (Fh.abs() == 0)
+					state = BodyState.STOPPED;
+			}
 		}
 	}
 
 	public void collisionWithRigidBodyCheck(AfterEventDescription aed, RigidBody r2, double t,
 			RigidBody[] rigidBodies) {
-
 		if (this.in(r2)) {
-			Runnable handler = new RigidBodyCollisionHandler(impactpoint(r2));
+			Runnable handler = new RigidBodyCollisionHandler(this, r2, impactpoint(r2));
 			aed.reportEvent(handler, "collision of rigidbodies: ", this.toString(), r2.toString());
 		}
 
@@ -141,8 +178,6 @@ public class RigidBody {
 					}
 				}
 			}
-			
-			double lastSmallestDistance = smallestDistance;
 
 			for (int i = 0; i < edges2.length; i++) {
 				for (int j = 0; j < vertices1.length; j++) {
@@ -158,12 +193,7 @@ public class RigidBody {
 
 			Vector2D p = new Vector2D(impactpoint.x, impactpoint.y);
 			Vector2D e = new Vector2D(impactedge.x2 - impactedge.x1, impactedge.y2 - impactedge.y1);
-			
-			if(smallestDistance != lastSmallestDistance)
-				return new Impactpoint(p, e, this, r2);
-			else 
-				return new Impactpoint(p, e, r2, this);
-
+			return new Impactpoint(p, e);
 		} else if (Circle.class.isAssignableFrom(this.shape.getClass())
 				&& Circle.class.isAssignableFrom(r2.shape.getClass())) {
 			Circle circleShape_r1 = (Circle) this.shape;
@@ -177,7 +207,7 @@ public class RigidBody {
 			impactEdge.normalize();
 			Vector2D impactPoint = VectorMath.add(this.r,
 					(VectorMath.mult(circleShape_r1.radius, VectorMath.normalize(r1_r2))));
-			return new Impactpoint(impactPoint, impactEdge, this, r2);
+			return new Impactpoint(impactPoint, impactEdge);
 		} else if (Circle.class.isAssignableFrom(this.shape.getClass())
 				&& Polygon.class.isAssignableFrom(r2.shape.getClass())) {
 			Polygon polygonShape_r2 = (Polygon) r2.shape;
@@ -203,7 +233,7 @@ public class RigidBody {
 						trueImpactEdge.set(1, 0);
 					if (this.r.y == r2.r.y)
 						trueImpactEdge.set(0, 1);
-					return new Impactpoint(impactPoint, trueImpactEdge, r2, this);
+					return new Impactpoint(impactPoint, trueImpactEdge);
 				}
 			}
 			// Case: hit edge
@@ -211,7 +241,7 @@ public class RigidBody {
 			Vector2D impactPoint = VectorMath.footOfPerpendicular(this.r, new Vector2D(impactEdge.x1, impactEdge.y1),
 					trueImpactEdge);
 			;
-			return new Impactpoint(impactPoint, trueImpactEdge, this, r2);
+			return new Impactpoint(impactPoint, trueImpactEdge);
 
 		} else if (Polygon.class.isAssignableFrom(this.shape.getClass())
 				&& Circle.class.isAssignableFrom(r2.shape.getClass())) {
@@ -238,7 +268,7 @@ public class RigidBody {
 						trueImpactEdge.set(1, 0);
 					if (r2.r.y == this.r.y)
 						trueImpactEdge.set(0, 1);
-					return new Impactpoint(impactPoint, trueImpactEdge, this, r2);
+					return new Impactpoint(impactPoint, trueImpactEdge);
 				}
 			}
 			// Case: hit edge
@@ -246,7 +276,7 @@ public class RigidBody {
 			Vector2D impactPoint = VectorMath.footOfPerpendicular(r2.r, new Vector2D(impactEdge.x1, impactEdge.y1),
 					trueImpactEdge);
 			;
-			return new Impactpoint(impactPoint, trueImpactEdge, r2, this);
+			return new Impactpoint(impactPoint, trueImpactEdge);
 		}
 		return null;
 	}
@@ -311,39 +341,39 @@ public class RigidBody {
 		}
 		return false;
 	}
-	
+
 	public boolean extendedIn(RigidBody rb) {
-		if(this.in(rb) == true) {
+		if (this.in(rb) == true) {
 			return true;
 		}
-		boolean in = false; 
+		boolean in = false;
 		Polygon p1 = (Polygon) this.shape;
 		Polygon p2 = (Polygon) rb.shape;
 		Point2D.Double[] vertices1 = verticesToInertialSystem(p1.vertices, this.phi, this.r);
 		Point2D.Double[] vertices2 = verticesToInertialSystem(p2.vertices, rb.phi, rb.r);
 		double[] xPoints1 = new double[vertices1.length];
 		double[] yPoints1 = new double[vertices1.length];
-		for(int i = 0; i < vertices1.length; i++) {
+		for (int i = 0; i < vertices1.length; i++) {
 			xPoints1[i] = vertices1[i].x;
 			yPoints1[i] = vertices1[i].y;
 		}
 		double[] xPoints2 = new double[vertices2.length];
 		double[] yPoints2 = new double[vertices2.length];
-		for(int i = 0; i < vertices2.length; i++) {
+		for (int i = 0; i < vertices2.length; i++) {
 			xPoints2[i] = vertices2[i].x;
 			yPoints2[i] = vertices2[i].y;
 		}
 		Polygon2D rb1 = new Polygon2D(xPoints1, yPoints1, xPoints1.length);
 		Polygon2D rb2 = new Polygon2D(xPoints2, yPoints2, xPoints2.length);
-		for(Point2D.Double p : vertices1) {
-			if(rb2.contains(p))
-				return true; 
+		for (Point2D.Double p : vertices1) {
+			if (rb2.contains(p))
+				return true;
 		}
-		for(Point2D.Double p : vertices2) {
-			if(rb1.contains(p))
-				return true; 
+		for (Point2D.Double p : vertices2) {
+			if (rb1.contains(p))
+				return true;
 		}
-		
+
 		return in;
 	}
 
@@ -374,14 +404,14 @@ public class RigidBody {
 	public String toString() {
 		String rbText = "(";
 		rbText += ("[uid=" + this.uid + "], ");
-		rbText += ("[m=" + m + "], "); 
+		rbText += ("[m=" + m + "], ");
 		rbText += ("[r=" + r + "], ");
-		rbText += ("[v=" + v + "], "); 
+		rbText += ("[v=" + v + "], ");
 		rbText += ("[a=" + a + "], ");
-		rbText += ("[I=" + m + "], "); 
+		rbText += ("[I=" + m + "], ");
 		rbText += ("[phi=" + phi + "], ");
-		rbText += ("[omega=" + omega + "], "); 
-		rbText += ("[alpha=" + alpha + "]"); 
+		rbText += ("[omega=" + omega + "], ");
+		rbText += ("[alpha=" + alpha + "]");
 		return rbText + ")";
 	}
 }

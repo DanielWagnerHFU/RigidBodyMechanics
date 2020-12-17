@@ -19,6 +19,7 @@ public class Circle extends AbstractShape {
 		this.radius = radius;
 	}
 
+
 	@Override
 	public void paint(TVG tvg, Vector2D position, double phi) {
 
@@ -40,6 +41,11 @@ public class Circle extends AbstractShape {
 	@Override
 	public double getI(double m) {
 		return m*radius*radius;
+	}
+	
+	@Override
+	public double getRadius() {
+		return radius;
 	}
 
 }
