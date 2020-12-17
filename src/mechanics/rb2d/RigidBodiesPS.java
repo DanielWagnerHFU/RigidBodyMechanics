@@ -24,7 +24,8 @@ public class RigidBodiesPS extends PhysicalSystem {
 	public double E_gesamt;
 
 	public RigidBodiesPS() {
-		test_rolling_incline_right();
+		test_rolling_plane02();
+//		test7();
 	}
 
 	private void test_rolling_incline_right() {
@@ -68,11 +69,26 @@ public class RigidBodiesPS extends PhysicalSystem {
 				new Vector2D(0, -9.81), 0.6, 0, 0));
 		rigidBodies.add(new RigidBody(new Circle(0.5), 1, new Vector2D(0, 0), new Vector2D(5, 0),
 				new Vector2D(0, -9.81), 0.6, 0, 0));
-//		rigidBodies.add(new RigidBody(new Circle(0.7), 1, new Vector2D(3, 3), new Vector2D(0, 0),
-//				new Vector2D(0, -9.81), 0.6, 0, 0));
-//		
-//		rigidBodies.add(new RigidBody(new Circle(0.7), 1, new Vector2D(0, 4), new Vector2D(0, 0),
-//				new Vector2D(0, -9.81), 0.6, 0, 0));
+		rigidBodies.add(new RigidBody(new Circle(0.7), 1, new Vector2D(3, 3), new Vector2D(0, 0),
+				new Vector2D(0, -9.81), 0.6, 0, 0));
+		
+		rigidBodies.add(new RigidBody(new Circle(0.7), 1, new Vector2D(0, 4), new Vector2D(0, 0),
+				new Vector2D(0, -9.81), 0.6, 0, 0));
+
+		this.rigidBodies = new RigidBody[rigidBodies.size()];
+		this.rigidBodies = rigidBodies.toArray(this.rigidBodies);
+	}
+	
+	private void test_rolling_plane02() {
+		List<RigidBody> rigidBodies = new ArrayList<RigidBody>();
+		rigidBodies.add(new RigidBody(Double.MAX_VALUE, new Vector2D(0, -2), new Vector2D(0, 0), new Vector2D(0, 0),
+				Double.MAX_VALUE, 0, 0, 0, false, new Rectangle(10.5, 1)));
+		
+		rigidBodies.add(new RigidBody(Double.MAX_VALUE, new Vector2D(0, 2.5), new Vector2D(0, 0), new Vector2D(0, 0),
+				Double.MAX_VALUE, -0.1, 0, 0, false, new Rectangle(4, 0.2)));
+		
+		rigidBodies.add(new RigidBody(new Circle(0.7), 1, new Vector2D(-1, 4), new Vector2D(0, 0),
+				new Vector2D(0, -9.81), 0.6, 0, 0));
 
 		this.rigidBodies = new RigidBody[rigidBodies.size()];
 		this.rigidBodies = rigidBodies.toArray(this.rigidBodies);
@@ -398,7 +414,7 @@ public class RigidBodiesPS extends PhysicalSystem {
 	@Override
 	public void initGraphicsComponents(GraphicsComponents g, Structure s, Recorder r, SimulationParameters sp) {
 		MechanicsTVG mTVG = new MechanicsTVG(this, s, r);
-		mTVG.geometry.setUserArea(-6, 6, -5, 3);
+		mTVG.geometry.setUserArea(-6, 6, -3, 5);
 		mTVG.velocityScaling = 100;
 		mTVG.accelerationScaling = 10;
 		mTVG.angularVelocityScaling = 0.2;
