@@ -13,7 +13,7 @@ public class RigidBodyCollisionHandler implements Runnable {
 	private RigidBody rb_p;
 	private RigidBody rb_e;
 	private Impactpoint ip;
-	private boolean showInfo = true;
+	private boolean showInfo = false;
 
 	private double friction = 0.03;
 
@@ -25,7 +25,6 @@ public class RigidBodyCollisionHandler implements Runnable {
 
 	@Override
 	public void run() {
-		System.out.println("IP Edge "+ ip.impactEdge);
 		rb_p.state = BodyState.FLYING;
 		rb_e.state = BodyState.FLYING;
 
@@ -135,19 +134,23 @@ public class RigidBodyCollisionHandler implements Runnable {
 				startRolling(rb_e, collisionEdge);
 			}
 		}
-
+		
+		rb_p.lastImpactEdge = ip.impactEdgeLine;
+		
+//		rb_p.lastImpactEdge_start.set(ip.impactEdgeLine.x1, ip.impactEdgeLine.y1);
+//		rb_p.lastImpactEdge_end.set(ip.impactEdgeLine.x2, ip.impactEdgeLine.y2);
 	}
 
 	private void startRolling(RigidBody rb, Vector2D collisionEdge) {
 		rb.state = BodyState.ROLLING;
-		
+		rb.r.y += 0.0001;
 
 		// Plane
 		if (collisionEdge.y == 0) {
 			rb.Fr.x = rb.g * rb.m * friction * (signum(rb.v.x));
 			rb.v.y = 0;
 			rb.a.set(rb.Fr.x / rb.m, 0);
-			rb.r.y += 0.0001;
+			
 
 		} else {
 			// Incline

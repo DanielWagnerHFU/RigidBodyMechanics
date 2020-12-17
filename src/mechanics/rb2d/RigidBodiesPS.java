@@ -24,7 +24,7 @@ public class RigidBodiesPS extends PhysicalSystem {
 	public double E_gesamt;
 
 	public RigidBodiesPS() {
-		test_rolling_plane02();
+		test_rolling_plane();
 //		test7();
 	}
 
@@ -63,16 +63,16 @@ public class RigidBodiesPS extends PhysicalSystem {
 		rigidBodies.add(new RigidBody(Double.MAX_VALUE, new Vector2D(6, -2), new Vector2D(0, 0), new Vector2D(0, 0),
 				Double.MAX_VALUE, Math.PI / 2, 0, 0, false, new Rectangle(10.5, 1)));
 		rigidBodies.add(new RigidBody(Double.MAX_VALUE, new Vector2D(0, 2.5), new Vector2D(0, 0), new Vector2D(0, 0),
-				Double.MAX_VALUE, -0.1, 0, 0, false, new Rectangle(2, 0.2)));
+				Double.MAX_VALUE, -0.1, 0, 0, false, new Rectangle(4, 0.2)));
 
-		rigidBodies.add(new RigidBody(new Circle(1), 1.5, new Vector2D(-4, 1), new Vector2D(2, 0),
-				new Vector2D(0, -9.81), 0.6, 0, 0));
-		rigidBodies.add(new RigidBody(new Circle(0.5), 1, new Vector2D(0, 0), new Vector2D(5, 0),
-				new Vector2D(0, -9.81), 0.6, 0, 0));
-		rigidBodies.add(new RigidBody(new Circle(0.7), 1, new Vector2D(3, 3), new Vector2D(0, 0),
-				new Vector2D(0, -9.81), 0.6, 0, 0));
-		
-		rigidBodies.add(new RigidBody(new Circle(0.7), 1, new Vector2D(0, 4), new Vector2D(0, 0),
+//		rigidBodies.add(new RigidBody(new Circle(1), 1.5, new Vector2D(-4, 1), new Vector2D(2, 0),
+//				new Vector2D(0, -9.81), 0.6, 0, 0));
+//		rigidBodies.add(new RigidBody(new Circle(0.5), 1, new Vector2D(0, 0), new Vector2D(5, 0),
+//				new Vector2D(0, -9.81), 0.6, 0, 0));
+//		rigidBodies.add(new RigidBody(new Circle(0.7), 1, new Vector2D(3, 3), new Vector2D(0, 0),
+//				new Vector2D(0, -9.81), 0.6, 0, 0));
+//		
+		rigidBodies.add(new RigidBody(new Circle(0.7), 1, new Vector2D(-1, 4), new Vector2D(-1, 0),
 				new Vector2D(0, -9.81), 0.6, 0, 0));
 
 		this.rigidBodies = new RigidBody[rigidBodies.size()];
@@ -87,8 +87,10 @@ public class RigidBodiesPS extends PhysicalSystem {
 		rigidBodies.add(new RigidBody(Double.MAX_VALUE, new Vector2D(0, 2.5), new Vector2D(0, 0), new Vector2D(0, 0),
 				Double.MAX_VALUE, -0.1, 0, 0, false, new Rectangle(4, 0.2)));
 		
-		rigidBodies.add(new RigidBody(new Circle(0.7), 1, new Vector2D(-1, 4), new Vector2D(0, 0),
-				new Vector2D(0, -9.81), 0.6, 0, 0));
+//		rigidBodies.add(new RigidBody(new Circle(0.7), 1, new Vector2D(-1, 4), new Vector2D(0, 0),
+//				new Vector2D(0, -9.81), -0.6, 0, 0));
+		rigidBodies.add(new RigidBody(new Circle(0.7), 1, new Vector2D(-4, 0), new Vector2D(2, 5),
+				new Vector2D(0, -9.81), -0.6, 0, 0));
 
 		this.rigidBodies = new RigidBody[rigidBodies.size()];
 		this.rigidBodies = rigidBodies.toArray(this.rigidBodies);

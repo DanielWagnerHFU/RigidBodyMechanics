@@ -81,6 +81,9 @@ public class RigidBody {
 
 	public boolean dynamic;
 
+	public Line2D.Double lastImpactEdge = new Line2D.Double(Double.MIN_VALUE, Double.MIN_VALUE, Double.MAX_VALUE,
+			Double.MAX_VALUE);
+
 	public RigidBody(double m, Vector2D r, Vector2D v, Vector2D a, double I, double phi, double omega, double alpha,
 			AbstractShape shape) {
 		this(m, r, v, a, I, phi, omega, alpha, true, shape);
@@ -149,11 +152,31 @@ public class RigidBody {
 
 	public void collisionWithRigidBodyCheck(AfterEventDescription aed, RigidBody r2, double t,
 			RigidBody[] rigidBodies) {
+
 		if (this.in(r2)) {
-			Runnable handler = new RigidBodyCollisionHandler(impactpoint(r2));
+			Impactpoint ip = impactpoint(r2);
+			System.out.println(ip.impactEdge.x);
+			if (ip.impactEdge.x != 0) {
+				lastImpactEdge = ip.impactEdgeLine;
+			}
+//			System.out.println("Line " + ip.impactEdgeLine.x1 + " " + ip.impactEdgeLine.y1 + " "
+//					+ ip.impactEdgeLine.x2 + " " + ip.impactEdgeLine.y2);
+
+			Runnable handler = new RigidBodyCollisionHandler(ip);
 			aed.reportEvent(handler, "collision of rigidbodies: ", this.toString(), r2.toString());
-		} else if(state == BodyState.ROLLING) {
-		
+		} else if (r2.state == BodyState.ROLLING) {
+			System.out.println("Last Edge " +lastImpactEdge.x1+" "+lastImpactEdge.y1+" "+lastImpactEdge.x2+" "+lastImpactEdge.y2);
+			if ((r2.r.x > lastImpactEdge.x1 && r2.r.x > lastImpactEdge.x2)
+					|| (r2.r.x < lastImpactEdge.x2 && r2.r.x < lastImpactEdge.x1)) {
+				Runnable handler = new CircleStartsFallingHandler(r2);
+				aed.reportEvent(handler, "Circle Starts falling ", this.toString(), r2.toString());
+			} else if (this.state == BodyState.ROLLING) {
+				if (this.r.x > lastImpactEdge.x2 && this.r.x > lastImpactEdge.x1
+						|| this.r.x < lastImpactEdge.x2 && this.r.x < lastImpactEdge.x1) {
+					Runnable handler = new CircleStartsFallingHandler(this);
+					aed.reportEvent(handler, "Circle Starts falling ", this.toString(), r2.toString());
+				}
+			}
 		}
 
 	}
@@ -174,9 +197,7 @@ public class RigidBody {
 
 			Point2D.Double impactpoint = vertices1[0];
 			Line2D.Double impactedge = edges2[0];
-			
-			
-			
+
 			double smallestDistance = Double.MAX_VALUE;
 			for (int i = 0; i < edges1.length; i++) {
 				for (int j = 0; j < vertices2.length; j++) {
@@ -188,7 +209,7 @@ public class RigidBody {
 					}
 				}
 			}
-			
+
 			double lastSmallestDistance = smallestDistance;
 
 			for (int i = 0; i < edges2.length; i++) {
@@ -205,10 +226,10 @@ public class RigidBody {
 
 			Vector2D p = new Vector2D(impactpoint.x, impactpoint.y);
 			Vector2D e = new Vector2D(impactedge.x2 - impactedge.x1, impactedge.y2 - impactedge.y1);
-			
-			if(smallestDistance != lastSmallestDistance)
+
+			if (smallestDistance != lastSmallestDistance)
 				return new Impactpoint(p, e, this, r2);
-			else 
+			else
 				return new Impactpoint(p, e, r2, this);
 
 		} else if (Circle.class.isAssignableFrom(this.shape.getClass())
@@ -238,7 +259,7 @@ public class RigidBody {
 				if (edge.ptSegDist(this.r.x, this.r.y) <= smallestDistanceToLine) {
 					smallestDistanceToLine = edge.ptSegDist(this.r.x, this.r.y);
 					impactEdge = edge;
-				
+
 				}
 			}
 			for (Point2D.Double vertex : vertices) {

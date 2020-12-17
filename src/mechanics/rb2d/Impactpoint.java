@@ -1,8 +1,11 @@
 package mechanics.rb2d;
 
 import java.awt.geom.Line2D;
+import java.awt.geom.Line2D.Double;
 
 import de.physolator.usr.components.Vector2D;
+import javafx.scene.shape.Line;
+import mechanics.rb2d.shapes.Circle;
 
 public class Impactpoint {
 	public Vector2D impactPoint;
