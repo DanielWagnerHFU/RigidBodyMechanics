@@ -14,7 +14,7 @@ public class CircleStartsFallingHandler implements Runnable {
 	
 	@Override
 	public void run() {
-		System.out.println("start Falling");
+//		System.out.println("start Falling");
 		circle.state = BodyState.FLYING;
 		circle.a.set(0,circle.g);
 	}

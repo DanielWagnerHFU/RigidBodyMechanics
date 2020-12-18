@@ -90,10 +90,10 @@ public class RigidBodyCollisionHandler implements Runnable {
 		// 3. Ruecktransformation ins Inertialsystem
 		Vector2D V1r_ = rotateVector2D(V1r, -rot);
 		Vector2D V2r_ = rotateVector2D(V2r, -rot);
-		
-		if(V1r_.abs() <0.001)
+
+		if (V1r_.abs() < 0.001)
 			rb_p.state = BodyState.STOPPED;
-		if(V2r_.abs() <0.001)
+		if (V2r_.abs() < 0.001)
 			rb_e.state = BodyState.STOPPED;
 
 		// 4. Setzen der neuen Werte
@@ -127,18 +127,19 @@ public class RigidBodyCollisionHandler implements Runnable {
 		else if (rb_e.v.x < 0)
 			rb_e.direction = BodyDirection.LEFT;
 
-		if ((Math.abs(v1r.x) + (Math.abs(v2r.x)) < 0.001)) {
+		if ((Math.abs(v1r.x) + (Math.abs(v2r.x)) < 0.001) && ip.impactEdge.y !=0) {
+			System.out.println(ip.impactEdge);
 			if (Circle.class.isAssignableFrom(rb_p.shape.getClass())) {
 				startRolling(rb_p, collisionEdge);
 			} else if (Circle.class.isAssignableFrom(rb_e.shape.getClass())) {
 				startRolling(rb_e, collisionEdge);
 			}
 		}
-		
-		rb_p.lastImpactEdge = ip.impactEdgeLine;
-		
-//		rb_p.lastImpactEdge_start.set(ip.impactEdgeLine.x1, ip.impactEdgeLine.y1);
-//		rb_p.lastImpactEdge_end.set(ip.impactEdgeLine.x2, ip.impactEdgeLine.y2);
+
+		if (ip.impactEdgeLine != null) {
+			rb_p.lastImpactEdge.setLine(ip.impactEdgeLine.x1, ip.impactEdgeLine.y1, ip.impactEdgeLine.x2,
+					ip.impactEdgeLine.y2);
+		}
 	}
 
 	private void startRolling(RigidBody rb, Vector2D collisionEdge) {
@@ -150,8 +151,6 @@ public class RigidBodyCollisionHandler implements Runnable {
 			rb.Fr.x = rb.g * rb.m * friction * (signum(rb.v.x));
 			rb.v.y = 0;
 			rb.a.set(rb.Fr.x / rb.m, 0);
-			
-
 		} else {
 			// Incline
 			rb.Fg.set(0, rb.m * rb.g);
