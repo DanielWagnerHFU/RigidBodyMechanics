@@ -161,8 +161,15 @@ public class RigidBody {
 	}
 
 	public void startFalling(RigidBody rb, AfterEventDescription aed) {
-		if ((rb.r.x > rb.lastImpactEdge.x1 && rb.r.x > rb.lastImpactEdge.x2)
-				|| (rb.r.x < rb.lastImpactEdge.x1 && rb.r.x < rb.lastImpactEdge.x2)) {
+		if ((rb.r.x > rb.lastImpactEdge.x1 && rb.r.x > rb.lastImpactEdge.x2)) {
+			Runnable handler = new CircleStartsFallingHandler(rb);
+			aed.reportEvent(handler, "Circle Starts falling ", rb.toString());
+		} else if (rb.v.x <0) {
+			if (rb.r.x + 0.175 < rb.lastImpactEdge.x1 && rb.r.x + 0.175 < rb.lastImpactEdge.x2) {
+				Runnable handler = new CircleStartsFallingHandler(rb);
+				aed.reportEvent(handler, "Circle Starts falling ", rb.toString());
+			}
+		} else if (rb.r.x < rb.lastImpactEdge.x1 && rb.r.x < rb.lastImpactEdge.x2) {
 			Runnable handler = new CircleStartsFallingHandler(rb);
 			aed.reportEvent(handler, "Circle Starts falling ", rb.toString());
 		}

@@ -127,8 +127,7 @@ public class RigidBodyCollisionHandler implements Runnable {
 		else if (rb_e.v.x < 0)
 			rb_e.direction = BodyDirection.LEFT;
 
-		if ((Math.abs(v1r.x) + (Math.abs(v2r.x)) < 0.001) && ip.impactEdge.y !=0) {
-			System.out.println(ip.impactEdge);
+		if ((Math.abs(v1r.x) + (Math.abs(v2r.x)) < 0.001)) {
 			if (Circle.class.isAssignableFrom(rb_p.shape.getClass())) {
 				startRolling(rb_p, collisionEdge);
 			} else if (Circle.class.isAssignableFrom(rb_e.shape.getClass())) {
