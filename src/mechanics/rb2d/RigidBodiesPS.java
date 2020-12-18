@@ -24,7 +24,7 @@ public class RigidBodiesPS extends PhysicalSystem {
 	public double E_gesamt;
 
 	public RigidBodiesPS() {
-		test_rolling_plane();
+		test_rolling_plane02();
 //		test7();
 	}
 
@@ -98,12 +98,12 @@ public class RigidBodiesPS extends PhysicalSystem {
 		rigidBodies.add(new RigidBody(Double.MAX_VALUE, new Vector2D(0, 2.5), new Vector2D(0, 0), new Vector2D(0, 0),
 				Double.MAX_VALUE, 0.1, 0, 0, false, new Rectangle(4, 0.2)));
 		
-//		rigidBodies.add(new RigidBody(new Circle(0.7), 1, new Vector2D(-1, 4), new Vector2D(0, 0),
-//				new Vector2D(0, -9.81), -0.6, 0, 0));
-//		rigidBodies.add(new RigidBody(new Circle(0.7), 1, new Vector2D(0, 4), new Vector2D(0, 0),
-//				new Vector2D(0, -9.81), -0.6, 0, 0));
+		rigidBodies.add(new RigidBody(new Circle(0.7), 1, new Vector2D(-2, 4), new Vector2D(0, 0),
+				new Vector2D(0, -9.81), -0.6, 0, 0));
+		rigidBodies.add(new RigidBody(new Circle(0.7), 1, new Vector2D(0, 4), new Vector2D(0, 0),
+				new Vector2D(0, -9.81), -0.6, 0, 0));
 		
-		rigidBodies.add(new RigidBody(new Circle(0.7), 1, new Vector2D(7, 0), new Vector2D(-3.5, 0),
+		rigidBodies.add(new RigidBody(new Circle(0.7), 1, new Vector2D(7, 0), new Vector2D(-3.6, 0),
 				new Vector2D(0, -9.81), -0.6, 0, 0));
 
 		this.rigidBodies = new RigidBody[rigidBodies.size()];

@@ -3,7 +3,6 @@ package mechanics.rb2d;
 import de.physolator.usr.components.Vector2D;
 import de.physolator.usr.components.VectorMath;
 import mechanics.rb2d.shapes.Circle;
-import mechanics.rb2d.shapes.Polygon;
 
 import static java.lang.Math.*;
 
@@ -14,6 +13,7 @@ public class RigidBodyCollisionHandler implements Runnable {
 	private RigidBody rb_e;
 	private Impactpoint ip;
 	private boolean showInfo = false;
+	private boolean impactCoords = false;
 
 	private double friction = 0.03;
 
@@ -98,25 +98,28 @@ public class RigidBodyCollisionHandler implements Runnable {
 
 		// 4. Setzen der neuen Werte
 
-		// Stosskoordinatensystem
-		// rb1.v.set(V1r);
-		// rb2.v.set(V2r);
-		//
-		// rb1.omega = Omega1;
-		// rb2.omega = Omega2;
-		//
-		// rb1.phi = phi1r;
-		// rb2.phi = phi2r;
-		//
-		// rb1.r.set(r1mr);
-		// rb2.r.set(r2mr);
+		if (impactCoords) {
+			// Stosskoordinatensystem
+			rb_p.v.set(V1r);
+			rb_e.v.set(V2r);
 
-		// Normale Koordinatensystem
-		rb_p.v.set(V1r_);
-		rb_e.v.set(V2r_);
+			rb_p.omega = Omega1;
+			rb_e.omega = Omega2;
 
-		rb_p.omega = Omega1;
-		rb_e.omega = Omega2;
+			rb_p.phi = rb_p.phi + rot;
+			rb_e.phi = rb_e.phi + rot;
+
+			rb_p.r.set(r1mr);
+			rb_e.r.set(r2mr);
+		} else {
+
+			// Normale Koordinatensystem
+			rb_p.v.set(V1r_);
+			rb_e.v.set(V2r_);
+
+			rb_p.omega = Omega1;
+			rb_e.omega = Omega2;
+		}
 
 		if (rb_p.v.x > 0)
 			rb_p.direction = BodyDirection.RIGHT;
