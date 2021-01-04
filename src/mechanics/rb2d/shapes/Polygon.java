@@ -12,6 +12,7 @@ import de.physolator.usr.components.VectorMath;
 import de.physolator.usr.tvg.Shape;
 import de.physolator.usr.tvg.TVG;
 import geometry.Polygon2D;
+import sun.security.provider.certpath.Vertex;
 
 public class Polygon extends AbstractShape{
 	public Vector2D[] vertices;
@@ -100,5 +101,10 @@ public class Polygon extends AbstractShape{
 	public double getRadius() {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+	
+	@Override
+	public Vector2D[] getVertices() {
+		return vertices;
 	}
 }

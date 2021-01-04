@@ -3,6 +3,7 @@ package mechanics.rb2d;
 import de.physolator.usr.components.Vector2D;
 import de.physolator.usr.components.VectorMath;
 import mechanics.rb2d.shapes.Circle;
+import mechanics.rb2d.shapes.Polygon;
 
 import static java.lang.Math.*;
 
@@ -67,13 +68,13 @@ public class RigidBodyCollisionHandler implements Runnable {
 		Vector2D v1r = rotateVector2D(rb_p.v, rot);
 		Vector2D v2r = rotateVector2D(rb_e.v, rot);
 
-		// Zustandsbestimmung nach Stoss
-		if ((Math.abs(v1r.x) + (Math.abs(v2r.x)) < 0.001)) {
-			rb_p.state = BodyState.STOPPED;
-			rb_e.state = BodyState.STOPPED;
-			if (this.showInfo)
-				System.out.println("Stopped: " + "v1r.x=" + v1r.x + ", v2r.x=" + v2r.x);
-		}
+//		// Zustandsbestimmung nach Stoss
+//		if ((Math.abs(v1r.x) + (Math.abs(v2r.x)) < 0.001)) {
+//			rb_p.state = BodyState.STOPPED;
+//			rb_e.state = BodyState.STOPPED;
+//			if (this.showInfo)
+//				System.out.println("Stopped: " + "v1r.x=" + v1r.x + ", v2r.x=" + v2r.x);
+//		}
 
 		// 2. Berechnung der neuen Größen im Stoßkoordinatensystem
 		double a1 = -r1mr.y;
@@ -133,8 +134,21 @@ public class RigidBodyCollisionHandler implements Runnable {
 		if ((Math.abs(v1r.x) + (Math.abs(v2r.x)) < 0.001)) {
 			if (Circle.class.isAssignableFrom(rb_p.shape.getClass())) {
 				startRolling(rb_p, collisionEdge);
+				return;
 			} else if (Circle.class.isAssignableFrom(rb_e.shape.getClass())) {
 				startRolling(rb_e, collisionEdge);
+				return;
+			} else if(Polygon.class.isAssignableFrom(rb_p.shape.getClass()) && Polygon.class.isAssignableFrom(rb_e.shape.getClass())) {
+				Vector2D[] rb_p_vertices = rb_p.shape.getVertices();
+				Vector2D[] rb_e_vertices = rb_e.shape.getVertices();
+				if(rb_p_vertices[0].y > rb_e_vertices[0].y) {
+					System.out.println("SLIDING P");
+//					startSliding(rb_p, collisionEdge);
+				}
+				if(rb_e_vertices[0].y > rb_p_vertices[0].y) {
+					System.out.println("SLIDING E");
+//					startSliding(rb_p, collisionEdge);
+				}
 			}
 		}
 
@@ -142,6 +156,14 @@ public class RigidBodyCollisionHandler implements Runnable {
 			rb_p.lastImpactEdge.setLine(ip.impactEdgeLine.x1, ip.impactEdgeLine.y1, ip.impactEdgeLine.x2,
 					ip.impactEdgeLine.y2);
 		}
+	}
+
+	private void startSliding(RigidBody rb, Vector2D collisionEdge) {
+		rb.state = BodyState.SLIDING;
+		rb.r.y += 0.0001;
+		rb.v.set(1,1);
+
+		
 	}
 
 	private void startRolling(RigidBody rb, Vector2D collisionEdge) {
