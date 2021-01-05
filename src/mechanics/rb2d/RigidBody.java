@@ -66,11 +66,11 @@ public class RigidBody {
 
 	@Ignore
 	public int color = Color.make(0.5, 0.5, 0.5);
-	@Ignore
+	
 	public AbstractShape shape;
-
+	@Ignore
 	public BodyState state;
-
+	@Ignore
 	public BodyDirection direction;
 	@Ignore
 	public boolean visible = true;
@@ -78,9 +78,9 @@ public class RigidBody {
 	public double t_before = 0;
 	@Ignore
 	public RigidBody impactPartner_before;
-
+	@Ignore
 	public boolean dynamic;
-
+	@Ignore
 	public Line2D.Double lastImpactEdge;
 
 	public RigidBody(double m, Vector2D r, Vector2D v, Vector2D a, double I, double phi, double omega, double alpha,
@@ -111,6 +111,11 @@ public class RigidBody {
 		this(m, r, v, a, shape.getI(m), phi, omega, alpha, true, shape);
 	}
 
+	public RigidBody(AbstractShape shape, Vector2D r, double phi) {
+		this.shape = shape;
+		this.r = r;
+		this.phi = phi;
+	}
 	public void f(double t, double dt) {
 		E_kin = 0.5 * m * v.abs() * v.abs();
 		E_rot = 0.5 * I * omega * omega;
