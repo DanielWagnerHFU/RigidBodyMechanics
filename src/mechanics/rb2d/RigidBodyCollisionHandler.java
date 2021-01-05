@@ -72,12 +72,15 @@ public class RigidBodyCollisionHandler implements Runnable {
 		Vector2D v1r = rotateVector2D(rb_p.v, rot);
 		Vector2D v2r = rotateVector2D(rb_e.v, rot);
 
-		double phi1 = rb_p.phi + rot;
-		double phi2 = rb_e.phi + rot;
+		
 
 //Is Vertex on right hand side?		
-		if (checkVertexIsRight(rb_p, r1mr, rot, phi1)) {
-			return;
+		if (!checkVertexIsRight(rb_p, r1mr, rot)) {
+			rot += Math.PI;
+			r1mr = rotateVector2D(r1mr, Math.PI);
+			r2mr = rotateVector2D(r2mr, Math.PI);
+			v1r = rotateVector2D(v1r, Math.PI);
+			v2r = rotateVector2D(v2r, Math.PI);
 		}
 
 //		// Zustandsbestimmung nach Stoss
@@ -172,7 +175,8 @@ public class RigidBodyCollisionHandler implements Runnable {
 		}
 	}
 
-	private boolean checkVertexIsRight(RigidBody rigidBody, Vector2D r, double rot, double phi) {
+	private boolean checkVertexIsRight(RigidBody rigidBody, Vector2D r, double rot) {
+		double phi = rb_p.phi + rot;
 		RigidBody rb = new RigidBody(rigidBody.shape, r, phi);
 
 		Polygon polygonShape = (Polygon) rb.shape;
@@ -180,37 +184,40 @@ public class RigidBodyCollisionHandler implements Runnable {
 
 		Point2D.Double vertexPre;
 		Point2D.Double vertexNext;
-		
+
 		System.out.println();
 		int index = -1;
 		for (int i = 0; i < vertices.length; i++) {
-			System.out.println(i +" "+vertices[i]);
+			System.out.println(i + " " + vertices[i]);
 			if (Math.round(vertices[i].x * 10e5) * 10e-5 == 0 && Math.round(vertices[i].y * 10e5) * 10e-5 == 0) {
 				index = i;
 			}
 		}
 		System.out.println();
-		if(index == 0) {
-			vertexPre = vertices[vertices.length-1];
+		if (index == 0) {
+			vertexPre = vertices[vertices.length - 1];
 			vertexNext = vertices[1];
 			System.out.println("first");
-			System.out.println("Pre "+ (vertices.length-1));
-			System.out.println("Next "+1);
-		}else if(index == vertices.length-1) {
-			vertexPre = vertices[index-1];
+			System.out.println("Pre " + (vertices.length - 1));
+			System.out.println("Next " + 1);
+		} else if (index == vertices.length - 1) {
+			vertexPre = vertices[index - 1];
 			vertexNext = vertices[0];
 			System.out.println("last");
-			System.out.println("Pre "+ (index-1));
-			System.out.println("Next "+0);
-		}else {
-			vertexPre = vertices[index-1];
-			vertexNext = vertices[index+1];
-			System.out.println("Pre "+ (index-1));
-			System.out.println("Next "+(index+1));
+			System.out.println("Pre " + (index - 1));
+			System.out.println("Next " + 0);
+		} else {
+			vertexPre = vertices[index - 1];
+			vertexNext = vertices[index + 1];
+			System.out.println("Pre " + (index - 1));
+			System.out.println("Next " + (index + 1));
 		}
-		System.out.println("Index: "+index);
-		
-		return false;
+		System.out.println("Index: " + index);
+
+		if (vertexPre.x > 0 && vertexNext.x > 0)
+			return true;
+		else
+			return false;
 	}
 
 	private Point2D.Double[] verticesToInertialSystem(Vector2D[] vertices, double phi, Vector2D translation) {
