@@ -24,17 +24,46 @@ public class RigidBodiesPS extends PhysicalSystem {
 	public double E_gesamt;
 
 	public RigidBodiesPS() {
-		test_sliding();
+		test_sliding_plane();
 	}
 
-	private void test_sliding() {
+	private void test_sliding_plane() {
+		List<RigidBody> rigidBodies = new ArrayList<RigidBody>();
+		rigidBodies.add(new RigidBody(Double.MAX_VALUE, new Vector2D(0, -2), new Vector2D(0, 0), new Vector2D(0, 0),
+				Double.MAX_VALUE, 0, 0, 0, false, new Rectangle(10.5, 1)));
+		rigidBodies.add(new RigidBody(Double.MAX_VALUE, new Vector2D(-6, -2), new Vector2D(0, 0), new Vector2D(0, 0),
+				Double.MAX_VALUE, Math.PI / 2, 0, 0, false, new Rectangle(10.5, 1)));
+
+		rigidBodies.add(new RigidBody(new Pentagon(1), 1.5, new Vector2D(4,0), new Vector2D(-3, 0),
+				new Vector2D(0, -9.81), Math.PI/4, 1, 0));
+
+		this.rigidBodies = new RigidBody[rigidBodies.size()];
+		this.rigidBodies = rigidBodies.toArray(this.rigidBodies);
+		
+	}
+
+	private void test_sliding_left() {
+		List<RigidBody> rigidBodies = new ArrayList<RigidBody>();
+		rigidBodies.add(new RigidBody(Double.MAX_VALUE, new Vector2D(0, -2), new Vector2D(0, 0), new Vector2D(0, 0),
+				Double.MAX_VALUE, 0.1, 0, 0, false, new Rectangle(10.5, 1)));
+		rigidBodies.add(new RigidBody(Double.MAX_VALUE, new Vector2D(-6, -2), new Vector2D(0, 0), new Vector2D(0, 0),
+				Double.MAX_VALUE, Math.PI / 2, 0, 0, false, new Rectangle(10.5, 1)));
+
+		rigidBodies.add(new RigidBody(new Pentagon(1), 1.5, new Vector2D(4,0), new Vector2D(0, 0),
+				new Vector2D(0, -9.81), Math.PI/4, 1, 0));
+
+		this.rigidBodies = new RigidBody[rigidBodies.size()];
+		this.rigidBodies = rigidBodies.toArray(this.rigidBodies);
+	}
+
+	private void test_sliding_right() {
 		List<RigidBody> rigidBodies = new ArrayList<RigidBody>();
 		rigidBodies.add(new RigidBody(Double.MAX_VALUE, new Vector2D(0, -2), new Vector2D(0, 0), new Vector2D(0, 0),
 				Double.MAX_VALUE, -0.1, 0, 0, false, new Rectangle(10.5, 1)));
-//		rigidBodies.add(new RigidBody(Double.MAX_VALUE, new Vector2D(6, -2), new Vector2D(0, 0), new Vector2D(0, 0),
-//				Double.MAX_VALUE, Math.PI / 2, 0, 0, false, new Rectangle(10.5, 1)));
+		rigidBodies.add(new RigidBody(Double.MAX_VALUE, new Vector2D(6, -2), new Vector2D(0, 0), new Vector2D(0, 0),
+				Double.MAX_VALUE, Math.PI / 2, 0, 0, false, new Rectangle(10.5, 1)));
 
-		rigidBodies.add(new RigidBody(new Hexagon(1), 1.5, new Vector2D(-4, 2), new Vector2D(0, 0),
+		rigidBodies.add(new RigidBody(new Triangle(1), 1.5, new Vector2D(-5, 1), new Vector2D(2, 0),
 				new Vector2D(0, -9.81), Math.PI/4, 1, 0));
 
 		this.rigidBodies = new RigidBody[rigidBodies.size()];

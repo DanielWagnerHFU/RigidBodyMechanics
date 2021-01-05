@@ -68,7 +68,7 @@ public class RigidBody {
 	public int color = Color.make(0.5, 0.5, 0.5);
 	
 	public AbstractShape shape;
-	@Ignore
+	
 	public BodyState state;
 	@Ignore
 	public BodyDirection direction;
@@ -131,13 +131,13 @@ public class RigidBody {
 			alpha = 0;
 			direction = BodyDirection.NONE;
 		}
-		if (state == BodyState.ROLLING) {
+		if (state == BodyState.ROLLING || state == BodyState.SLIDING) {
 			Fr.x = Math.abs(Fr.x) * signum(-v.x);
 			Fr.y = Math.abs(Fr.y) * signum(-v.y);
 
-			if (direction == BodyDirection.LEFT) {
+			if (direction == BodyDirection.LEFT && state == BodyState.ROLLING) {
 				omega = v.abs() / shape.getRadius();
-			} else if (direction == BodyDirection.RIGHT) {
+			} else if (direction == BodyDirection.RIGHT && state == BodyState.ROLLING) {
 				omega = -v.abs() / shape.getRadius();
 			}
 
@@ -150,7 +150,6 @@ public class RigidBody {
 				direction = BodyDirection.RIGHT;
 			else if (v.x < 0)
 				direction = BodyDirection.LEFT;
-
 		}
 	}
 

@@ -72,17 +72,17 @@ public class RigidBodyCollisionHandler implements Runnable {
 		Vector2D v1r = rotateVector2D(rb_p.v, rot);
 		Vector2D v2r = rotateVector2D(rb_e.v, rot);
 
-		
-
-//Is Vertex on right hand side?		
-		if (!checkVertexIsRight(rb_p, r1mr, rot)) {
-			rot += Math.PI;
-			r1mr = rotateVector2D(r1mr, Math.PI);
-			r2mr = rotateVector2D(r2mr, Math.PI);
-			v1r = rotateVector2D(v1r, Math.PI);
-			v2r = rotateVector2D(v2r, Math.PI);
+//Is Vertex on right hand side?	
+		if (Polygon.class.isAssignableFrom(rb_p.shape.getClass())
+				&& Polygon.class.isAssignableFrom(rb_e.shape.getClass())) {
+			if (!checkVertexIsRight(rb_p, r1mr, rot)) {
+				rot += Math.PI;
+				r1mr = rotateVector2D(r1mr, Math.PI);
+				r2mr = rotateVector2D(r2mr, Math.PI);
+				v1r = rotateVector2D(v1r, Math.PI);
+				v2r = rotateVector2D(v2r, Math.PI);
+			}
 		}
-
 //		// Zustandsbestimmung nach Stoss
 //		if ((Math.abs(v1r.x) + (Math.abs(v2r.x)) < 0.001)) {
 //			rb_p.state = BodyState.STOPPED;
@@ -90,6 +90,9 @@ public class RigidBodyCollisionHandler implements Runnable {
 //			if (this.showInfo)
 //				System.out.println("Stopped: " + "v1r.x=" + v1r.x + ", v2r.x=" + v2r.x);
 //		}
+		if ((Math.abs(v1r.x) + (Math.abs(v2r.x)) < 0.1)) {
+			eventAfterImpact(collisionEdge);
+		}
 
 		// 2. Berechnung der neuen Größen im Stoßkoordinatensystem
 		double a1 = -r1mr.y;
@@ -147,31 +150,41 @@ public class RigidBodyCollisionHandler implements Runnable {
 		else if (rb_e.v.x < 0)
 			rb_e.direction = BodyDirection.LEFT;
 
-		if ((Math.abs(v1r.x) + (Math.abs(v2r.x)) < 0.001)) {
-			if (Circle.class.isAssignableFrom(rb_p.shape.getClass())) {
-				startRolling(rb_p, collisionEdge);
-				return;
-			} else if (Circle.class.isAssignableFrom(rb_e.shape.getClass())) {
-				startRolling(rb_e, collisionEdge);
-				return;
-			} else if (Polygon.class.isAssignableFrom(rb_p.shape.getClass())
-					&& Polygon.class.isAssignableFrom(rb_e.shape.getClass())) {
-				Vector2D[] rb_p_vertices = rb_p.shape.getVertices();
-				Vector2D[] rb_e_vertices = rb_e.shape.getVertices();
-				if (rb_p_vertices[0].y > rb_e_vertices[0].y) {
-					System.out.println("SLIDING P");
-//					startSliding(rb_p, collisionEdge);
-				}
-				if (rb_e_vertices[0].y > rb_p_vertices[0].y) {
-					System.out.println("SLIDING E");
-//					startSliding(rb_p, collisionEdge);
-				}
-			}
-		}
+//		if ((Math.abs(v1r.x) + (Math.abs(v2r.x)) < 0.001)) {
+//			if (Circle.class.isAssignableFrom(rb_p.shape.getClass())) {
+//				startRolling(rb_p, collisionEdge);
+//				return;
+//			} else if (Circle.class.isAssignableFrom(rb_e.shape.getClass())) {
+//				startRolling(rb_e, collisionEdge);
+//				return;
+//			} else if (Polygon.class.isAssignableFrom(rb_p.shape.getClass())
+//					&& Polygon.class.isAssignableFrom(rb_e.shape.getClass())) {
+//				Vector2D[] rb_p_vertices = rb_p.shape.getVertices();
+//				Vector2D[] rb_e_vertices = rb_e.shape.getVertices();
+//
+//				System.out.println("SLIDING P");
+////					startSliding(rb_p, collisionEdge);
+//
+//			}
+//		}
 
 		if (ip.impactEdgeLine != null) {
 			rb_p.lastImpactEdge.setLine(ip.impactEdgeLine.x1, ip.impactEdgeLine.y1, ip.impactEdgeLine.x2,
 					ip.impactEdgeLine.y2);
+		}
+	}
+
+	private void eventAfterImpact(Vector2D collisionEdge) {
+		if (Circle.class.isAssignableFrom(rb_p.shape.getClass())) {
+			startRolling(rb_p, collisionEdge);
+			return;
+		} else if (Circle.class.isAssignableFrom(rb_e.shape.getClass())) {
+			startRolling(rb_e, collisionEdge);
+			return;
+		} else if (Polygon.class.isAssignableFrom(rb_p.shape.getClass())
+				&& Polygon.class.isAssignableFrom(rb_e.shape.getClass())) {
+			startSliding(rb_p, collisionEdge);
+
 		}
 	}
 
@@ -185,34 +198,22 @@ public class RigidBodyCollisionHandler implements Runnable {
 		Point2D.Double vertexPre;
 		Point2D.Double vertexNext;
 
-		System.out.println();
 		int index = -1;
 		for (int i = 0; i < vertices.length; i++) {
-			System.out.println(i + " " + vertices[i]);
 			if (Math.round(vertices[i].x * 10e5) * 10e-5 == 0 && Math.round(vertices[i].y * 10e5) * 10e-5 == 0) {
 				index = i;
 			}
 		}
-		System.out.println();
 		if (index == 0) {
 			vertexPre = vertices[vertices.length - 1];
 			vertexNext = vertices[1];
-			System.out.println("first");
-			System.out.println("Pre " + (vertices.length - 1));
-			System.out.println("Next " + 1);
 		} else if (index == vertices.length - 1) {
 			vertexPre = vertices[index - 1];
 			vertexNext = vertices[0];
-			System.out.println("last");
-			System.out.println("Pre " + (index - 1));
-			System.out.println("Next " + 0);
 		} else {
 			vertexPre = vertices[index - 1];
 			vertexNext = vertices[index + 1];
-			System.out.println("Pre " + (index - 1));
-			System.out.println("Next " + (index + 1));
 		}
-		System.out.println("Index: " + index);
 
 		if (vertexPre.x > 0 && vertexNext.x > 0)
 			return true;
@@ -236,9 +237,54 @@ public class RigidBodyCollisionHandler implements Runnable {
 
 	private void startSliding(RigidBody rb, Vector2D collisionEdge) {
 		rb.state = BodyState.SLIDING;
-		rb.r.y += 0.0001;
-		rb.v.set(1, 1);
+		rb.omega = 0;
+		rb.alpha = 0;
+		// Plane
+		if (collisionEdge.y == 0) {
+			rb.Fr.x = rb.g * rb.m * friction * (signum(rb.v.x));
+			rb.v.y = 0;
+			rb.a.set(rb.Fr.x / rb.m, 0);
+		} else {
+			//Incline
+			System.out.println("pos " + rb.r);
 
+			rb.Fg.set(0, rb.m * rb.g);
+			double angle = VectorMath.angle(collisionEdge, new Vector2D(1, 0));
+
+			if (collisionEdge.x > 0 && collisionEdge.y > 0)
+				rb.Fh.set(rotateVector2D(rb.Fg, angle + Math.PI / 2));
+			else if (collisionEdge.x > 0 && collisionEdge.y < 0)
+				rb.Fh.set(rotateVector2D(rb.Fg, -angle + Math.PI / 2));
+
+			Vector2D FhN = VectorMath.normalize(rb.Fh);
+			double FgA = VectorMath.abs(rb.Fg);
+			double FgAsin = FgA * sin(angle);
+			rb.Fh.set(VectorMath.mult(FgAsin, FhN));
+			if (collisionEdge.y > 0)
+				rb.Fh.mult(-1);
+
+			rb.Fn.set(rotateVector2D(rb.Fg, -angle));
+			Vector2D FnN = VectorMath.normalize(rb.Fn);
+			double FgAcos = FgA * cos(angle);
+			rb.Fn.set(VectorMath.mult(FgAcos, FnN));
+
+			double FnA = VectorMath.abs(rb.Fn);
+			double Frx = FnA * cos(angle) * friction * (-signum(rb.Fh.x));
+			double Fry = FnA * sin(angle) * friction * (-signum(rb.Fh.y));
+
+			rb.Fr.set(Frx, Fry);
+			System.out.println(rb.Fr);
+
+			if (rb.Fhr.abs() < rb.Fh.abs()) {
+
+				rb.Fres.set(VectorMath.sub(rb.Fh, rb.Fr));
+
+				rb.a.x = rb.Fh.x / rb.m;
+				rb.a.y = rb.Fh.y / rb.m;
+			} else {
+				rb.state = BodyState.STOPPED;
+			}
+		}
 	}
 
 	private void startRolling(RigidBody rb, Vector2D collisionEdge) {
