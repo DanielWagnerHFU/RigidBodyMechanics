@@ -27,4 +27,22 @@ public class PolygonShape extends AbstractShape{
 					position.y + sin(phi) * e.x - cos(phi) * e.y);
 		tvg.endShape();
 	}
+
+	@Override
+	public double getI(double m) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public double getRadius() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public Vector2D[] getVertices() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

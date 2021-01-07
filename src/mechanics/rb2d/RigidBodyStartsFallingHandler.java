@@ -1,9 +1,13 @@
 package mechanics.rb2d;
 
 import java.awt.geom.Line2D;
+import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
 
 import de.physolator.usr.components.Vector2D;
 import de.physolator.usr.components.VectorMath;
+import mechanics.rb2d.shapes.Circle;
+import mechanics.rb2d.shapes.Polygon;
 
 public class RigidBodyStartsFallingHandler implements Runnable {
 
@@ -17,33 +21,46 @@ public class RigidBodyStartsFallingHandler implements Runnable {
 
 	@Override
 	public void run() {
+		System.out.println("Start Flying");
 		rb.state = BodyState.FLYING;
 		rb.a.set(0, rb.g);
-		rb.r.y += 0.01;
+//		rb.r.y +=0.01;
+		rb.v.y += 0.5;
+		
 
-		if (rb.r.x < impactEdge.x1 && rb.r.x < impactEdge.x2) {
-			rb.phi += 0.1;
-			rb.r.x -= 0.01;
+		if (Polygon.class.isAssignableFrom(rb.shape.getClass())) {
+//			double torque = getTorque(rb, impactEdge);
 
+			if (rb.r.x > impactEdge.x1 && rb.r.x > impactEdge.x2) {
+				rb.phi -= Math.toRadians(5);
+//				rb.r.x += 0.2;
+//				rb.omega = -torque / rb.I;
+			} else {
+				rb.phi += Math.toRadians(5);
+//				rb.r.x -= 0.2;
+//				rb.omega = torque / rb.I;
+			}
 		} else {
-			rb.phi -= 0.1;
-			rb.r.x += 0.01;
+			// Circle
+			rb.r.y += 0.01;
 		}
-//		double torque = getTorque(rb, impactEdge);
-//		
-//		rb.alpha = torque/rb.I;
 
 	}
 
 	private double getTorque(RigidBody rb, Line2D.Double impactEdge) {
-		Line2D.Double forceLine = new Line2D.Double(rb.r.x, rb.r.y, rb.r.x + rb.Fg.x, rb.r.y + rb.Fg.y);
-		double dist1 = forceLine.ptLineDist(impactEdge.x1, impactEdge.y1);
-		double dist2 = forceLine.ptLineDist(impactEdge.x2, impactEdge.y2);
+		System.out.println();
+		Line2D.Double forceLine = new Line2D.Double(rb.r.x, rb.r.y, rb.r.x + rb.Fg.y, rb.r.y + rb.Fg.y);
+		System.out.println(forceLine.x1 + " " + forceLine.y1 + " " + forceLine.x2 + " " + forceLine.y2);
+		double dist1 = Math.abs(rb.r.x - impactEdge.x1);
+		double dist2 = Math.abs(rb.r.x - impactEdge.x2);
 		double dist;
 		if (dist1 < dist2)
 			dist = dist1;
 		else
 			dist = dist2;
+//		System.out.println("dist 1 " + dist1);
+//		System.out.println("dist 2 " + dist2);
+//		System.out.println("dist " + dist);
 
 		return dist * rb.Fg.abs();
 	}

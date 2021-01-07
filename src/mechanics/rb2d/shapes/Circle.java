@@ -48,4 +48,10 @@ public class Circle extends AbstractShape {
 		return radius;
 	}
 
+	@Override
+	public Vector2D[] getVertices() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
