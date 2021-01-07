@@ -158,23 +158,23 @@ public class RigidBody {
 		if (this.in(r2)) {
 			Runnable handler = new RigidBodyCollisionHandler(impactpoint(r2));
 			aed.reportEvent(handler, "collision of rigidbodies: ", this.toString(), r2.toString());
-		} else if (this.state == BodyState.ROLLING)
-			startFalling(this, aed);
-		else if (r2.state == BodyState.ROLLING)
-			startFalling(r2, aed);
+		} else if (this.state == BodyState.ROLLING || this.state == BodyState.SLIDING)
+			startFalling(this, impactpoint(r2), aed);
+		else if (r2.state == BodyState.ROLLING || r2.state == BodyState.SLIDING)
+			startFalling(r2, impactpoint(r2), aed);
 	}
 
-	public void startFalling(RigidBody rb, AfterEventDescription aed) {
+	public void startFalling(RigidBody rb, Impactpoint ip, AfterEventDescription aed) {
 		if ((rb.r.x > rb.lastImpactEdge.x1 && rb.r.x > rb.lastImpactEdge.x2)) {
-			Runnable handler = new CircleStartsFallingHandler(rb);
+			Runnable handler = new RigidBodyStartsFallingHandler(rb, ip.impactEdgeLine);
 			aed.reportEvent(handler, "Circle Starts falling ", rb.toString());
 		} else if (rb.v.x <0) {
-			if (rb.r.x + 0.175 < rb.lastImpactEdge.x1 && rb.r.x + 0.175 < rb.lastImpactEdge.x2) {
-				Runnable handler = new CircleStartsFallingHandler(rb);
+			if (rb.r.x + 0.4 < rb.lastImpactEdge.x1 && rb.r.x + 0.4 < rb.lastImpactEdge.x2) {
+				Runnable handler = new RigidBodyStartsFallingHandler(rb, ip.impactEdgeLine);
 				aed.reportEvent(handler, "Circle Starts falling ", rb.toString());
 			}
 		} else if (rb.r.x < rb.lastImpactEdge.x1 && rb.r.x < rb.lastImpactEdge.x2) {
-			Runnable handler = new CircleStartsFallingHandler(rb);
+			Runnable handler = new RigidBodyStartsFallingHandler(rb, ip.impactEdgeLine);
 			aed.reportEvent(handler, "Circle Starts falling ", rb.toString());
 		}
 	}
@@ -224,11 +224,12 @@ public class RigidBody {
 
 			Vector2D p = new Vector2D(impactpoint.x, impactpoint.y);
 			Vector2D e = new Vector2D(impactedge.x2 - impactedge.x1, impactedge.y2 - impactedge.y1);
+			Line2D.Double e_line = new Line2D.Double(impactedge.x1, impactedge.y1, impactedge.x2, impactedge.y2);
 
 			if (smallestDistance != lastSmallestDistance)
-				return new Impactpoint(p, e, this, r2);
+				return new Impactpoint(p, e, this, r2, e_line);
 			else
-				return new Impactpoint(p, e, r2, this);
+				return new Impactpoint(p, e, r2, this, e_line);
 
 		} else if (Circle.class.isAssignableFrom(this.shape.getClass())
 				&& Circle.class.isAssignableFrom(r2.shape.getClass())) {
