@@ -9,6 +9,8 @@ import de.physolator.usr.components.Vector2D;
 import de.physolator.usr.components.VectorMath;
 import de.physolator.usr.util.Color;
 import geometry.Polygon2D;
+import mechanics.rb2d.misc.BodyDirection;
+import mechanics.rb2d.misc.BodyState;
 import mechanics.rb2d.shapes.AbstractShape;
 import mechanics.rb2d.shapes.Circle;
 import mechanics.rb2d.shapes.Polygon;

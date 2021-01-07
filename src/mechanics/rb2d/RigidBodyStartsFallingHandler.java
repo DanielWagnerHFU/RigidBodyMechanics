@@ -6,6 +6,7 @@ import java.awt.geom.Point2D.Double;
 
 import de.physolator.usr.components.Vector2D;
 import de.physolator.usr.components.VectorMath;
+import mechanics.rb2d.misc.BodyState;
 import mechanics.rb2d.shapes.Circle;
 import mechanics.rb2d.shapes.Polygon;
 

@@ -2,6 +2,8 @@ package mechanics.rb2d;
 
 import de.physolator.usr.components.Vector2D;
 import de.physolator.usr.components.VectorMath;
+import mechanics.rb2d.misc.BodyDirection;
+import mechanics.rb2d.misc.BodyState;
 import mechanics.rb2d.shapes.Circle;
 import mechanics.rb2d.shapes.Polygon;
 import sun.security.util.Length;
