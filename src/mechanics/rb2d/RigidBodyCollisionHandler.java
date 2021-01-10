@@ -212,7 +212,7 @@ public class RigidBodyCollisionHandler implements Runnable {
 
 		Vector2D edgeToPre = VectorMath.sub(ip.impactPoint, vecPre);
 		Vector2D edgeToNext = VectorMath.sub(ip.impactPoint, vecNext);
-		System.out.println("PREEEEEE " + edgeToPre);
+//		System.out.println("PREEEEEE " + edgeToPre);
 
 //		double edgeAngle = VectorMath.angle(new Vector2D(1, 0), ip.impactEdge);
 		double angleEdgeToPre = Math.toDegrees(VectorMath.angle(ip.impactEdge, edgeToPre));
@@ -221,10 +221,10 @@ public class RigidBodyCollisionHandler implements Runnable {
 //		System.out.println("AngelPre " + angleEdgeToPre);
 //		System.out.println("AngelNext " + angleEdgeToNext);
 
-		if (angleEdgeToPre >= 0 && angleEdgeToPre <= 5 || angleEdgeToPre >= 175 && angleEdgeToPre <= 185) {
+		if (angleEdgeToPre >= 0 && angleEdgeToPre <= 2 || angleEdgeToPre >= 178 && angleEdgeToPre <= 182) {
 			rb_p.slidingEdge = (edgeToPre);
 			return true;
-		} else if (angleEdgeToNext >= 0 && angleEdgeToNext <= 5 || angleEdgeToNext >= 175 && angleEdgeToNext <= 185) {
+		} else if (angleEdgeToNext >= 0 && angleEdgeToNext <= 2 || angleEdgeToNext >= 178 && angleEdgeToNext <= 182) {
 			rb_p.slidingEdge = (edgeToNext);
 			return true;
 		}
@@ -354,17 +354,17 @@ public class RigidBodyCollisionHandler implements Runnable {
 				rb.state = BodyState.STOPPED;
 			}
 
-			double helper = VectorMath.angle(collisionEdge, rb.v);
-			Vector2D vr = null;
-//			Vector2D vr = rotateVector2D(rb.v, helper);
-//			System.out.println(VectorMath.angle(vr, rb.a));
-			if (rb.a.x > 0) {
-				vr = rotateVector2D(rb.v, -helper);
-			} else {
-				vr = rotateVector2D(rb.v, helper);
-				vr = VectorMath.invert(vr);
+			Vector2D vr = new Vector2D(rb.v.x, 0);
+			double helper = VectorMath.angle(vr, rb.a);
+
+			if (rb.a.x < 0)
+				vr = rotateVector2D(vr, helper);
+			else {
+				vr = rotateVector2D(vr, -helper);
 			}
+
 			rb.v.set(vr);
+
 		}
 
 	}

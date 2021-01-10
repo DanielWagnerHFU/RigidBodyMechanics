@@ -26,7 +26,7 @@ public class RigidBodiesPS extends PhysicalSystem {
 
 	public RigidBodiesPS() {
 		test_sliding_left();
-//		test_sliding_right();
+		test_sliding_right();
 //		test_sliding_plane();
 //		test_rolling_incline_left();
 
@@ -84,7 +84,7 @@ public class RigidBodiesPS extends PhysicalSystem {
 //				Double.MAX_VALUE, Math.PI / 2, 0, 0, false, new Rectangle(10.5, 1)));
 
 		rigidBodies.add(new RigidBody(new Triangle(1), 1.5, new Vector2D(4,0), new Vector2D(-3, 0),
-				new Vector2D(0, -9.81), Math.PI/4, 2, 0));
+				new Vector2D(0, -9.81), Math.PI/2, 1, 0));
 		
 
 		this.rigidBodies = new RigidBody[rigidBodies.size()];
