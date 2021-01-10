@@ -1,5 +1,5 @@
 package mechanics.rb2d.misc;
 
 public enum BodyState {
-	FLYING, STOPPED, ROLLING, SLIDING
+	FLYING, STOPPED, ROLLING, SLIDING, TIPPING
 }

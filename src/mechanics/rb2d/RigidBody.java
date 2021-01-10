@@ -84,6 +84,8 @@ public class RigidBody {
 	public boolean dynamic;
 	@Ignore
 	public Line2D.Double lastImpactEdge;
+	@Ignore
+	public Vector2D slidingEdge;
 
 	public RigidBody(double m, Vector2D r, Vector2D v, Vector2D a, double I, double phi, double omega, double alpha,
 			AbstractShape shape) {

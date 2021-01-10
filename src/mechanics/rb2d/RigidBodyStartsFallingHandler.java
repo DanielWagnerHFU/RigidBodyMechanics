@@ -26,20 +26,22 @@ public class RigidBodyStartsFallingHandler implements Runnable {
 		rb.state = BodyState.FLYING;
 		rb.a.set(0, rb.g);
 //		rb.r.y +=0.01;
-		rb.v.y += 0.5;
+//		rb.v.y += 0.5;
 		
 
 		if (Polygon.class.isAssignableFrom(rb.shape.getClass())) {
-//			double torque = getTorque(rb, impactEdge);
-
+			double edgeLength = rb.slidingEdge.abs();
+			double v = rb.v.abs();
+			if(edgeLength >= v) {
+				rb.v.y = edgeLength/v/10;
+			}else {
+				rb.v.y = v/edgeLength/10;
+			}
+			System.out.println(rb.v.y);
 			if (rb.r.x > impactEdge.x1 && rb.r.x > impactEdge.x2) {
 				rb.phi -= Math.toRadians(5);
-//				rb.r.x += 0.2;
-//				rb.omega = -torque / rb.I;
 			} else {
 				rb.phi += Math.toRadians(5);
-//				rb.r.x -= 0.2;
-//				rb.omega = torque / rb.I;
 			}
 		} else {
 			// Circle
