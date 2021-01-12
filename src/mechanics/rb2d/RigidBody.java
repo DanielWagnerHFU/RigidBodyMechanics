@@ -176,51 +176,18 @@ public class RigidBody {
 			startFalling(r2, impactpoint(this), aed);
 	}
 
-	public void startFalling_01(RigidBody rb, Impactpoint ip, AfterEventDescription aed) {
-		if ((rb.r.x > rb.lastImpactEdge.x1 && rb.r.x > rb.lastImpactEdge.x2)) {
-			Runnable handler = new RigidBodyStartsFallingHandler(rb, ip.impactEdgeLine);
-			aed.reportEvent(handler, "Circle Starts falling ", rb.r.toString());
-		} else if (rb.v.x < 0) {
-			if (rb.r.x + 0.12 < rb.lastImpactEdge.x1 && rb.r.x + 0.12 < rb.lastImpactEdge.x2) {
-				Runnable handler = new RigidBodyStartsFallingHandler(rb, ip.impactEdgeLine);
-				aed.reportEvent(handler, "Circle Starts falling ", rb.r.toString());
-			}
-		} else if (rb.r.x < rb.lastImpactEdge.x1 && rb.r.x < rb.lastImpactEdge.x2) {
-			Runnable handler = new RigidBodyStartsFallingHandler(rb, ip.impactEdgeLine);
-			aed.reportEvent(handler, "Circle Starts falling ", rb.r.toString());
-		}
-	}
-
 	public void startFalling(RigidBody rb, Impactpoint ip, AfterEventDescription aed) {
-		if (Polygon.class.isAssignableFrom(rb.shape.getClass())) {
-			
-			if ((rb.r.x - 0.1 > rb.lastImpactEdge.x1 && rb.r.x - 0.1 > rb.lastImpactEdge.x2)) {
-				System.out.println("A");
-				Runnable handler = new RigidBodyStartsFallingHandler(rb, ip.impactEdgeLine);
-				aed.reportEvent(handler, "Polygon Starts falling ", rb.r.toString());
-//			} else if (rb.v.x < 0) {
-//				if (rb.r.x + 0.12 < rb.lastImpactEdge.x1 && rb.r.x + 0.12 < rb.lastImpactEdge.x2) {
-//					Runnable handler = new RigidBodyStartsFallingHandler(rb, ip.impactEdgeLine);
-//					aed.reportEvent(handler, "Polygon Starts falling ", rb.toString());
-//				}
-			} else if (rb.r.x +0.1 < rb.lastImpactEdge.x1 && rb.r.x+0.1 < rb.lastImpactEdge.x2) {
-				Runnable handler = new RigidBodyStartsFallingHandler(rb, ip.impactEdgeLine);
-				aed.reportEvent(handler, "Polygon Starts falling ", rb.r.toString());
-			}
-
-		} else if (Circle.class.isAssignableFrom(rb.shape.getClass())) {
-			if ((rb.r.x > rb.lastImpactEdge.x1 && rb.r.x > rb.lastImpactEdge.x2)) {
-				Runnable handler = new RigidBodyStartsFallingHandler(rb, ip.impactEdgeLine);
-				aed.reportEvent(handler, "Circle Starts falling ", rb.r.toString());
-			} else if (rb.v.x < 0) {
-				if (rb.r.x + 0.2 < rb.lastImpactEdge.x1 && rb.r.x + 0.2 < rb.lastImpactEdge.x2) {
-					Runnable handler = new RigidBodyStartsFallingHandler(rb, ip.impactEdgeLine);
-					aed.reportEvent(handler, "Circle Starts falling ", rb.r.toString());
-				}
-			} else if (rb.r.x < rb.lastImpactEdge.x1 && rb.r.x < rb.lastImpactEdge.x2) {
-				Runnable handler = new RigidBodyStartsFallingHandler(rb, ip.impactEdgeLine);
-				aed.reportEvent(handler, "Circle Starts falling ", rb.toString());
-			}
+		double delta = 0;
+		if (Polygon.class.isAssignableFrom(this.shape.getClass()))
+			delta = 0.5;
+		else if (Polygon.class.isAssignableFrom(this.shape.getClass()))
+			delta = 0.5;
+		if ((rb.r.x - delta > rb.lastImpactEdge.x1 && rb.r.x - delta > rb.lastImpactEdge.x2)) {
+			Runnable handler = new RigidBodyStartsFallingHandler(rb, ip.impactEdgeLine);
+			aed.reportEvent(handler, "Circle Starts falling ", rb.r.toString());
+		} else if (rb.r.x + delta < rb.lastImpactEdge.x1 && rb.r.x + delta < rb.lastImpactEdge.x2) {
+			Runnable handler = new RigidBodyStartsFallingHandler(rb, ip.impactEdgeLine);
+			aed.reportEvent(handler, "Circle Starts falling ", rb.r.toString());
 		}
 	}
 
