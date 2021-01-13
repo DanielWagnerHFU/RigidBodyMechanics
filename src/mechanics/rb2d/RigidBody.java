@@ -243,6 +243,10 @@ public class RigidBody {
 
 			Vector2D p = new Vector2D(impactpoint.x, impactpoint.y);
 			Vector2D e = new Vector2D(impactedge.x2 - impactedge.x1, impactedge.y2 - impactedge.y1);
+			System.out.println("EEEEEEEEEEEEEEE "+e);
+			if(e.x <0)
+				e.invert();
+			System.out.println("EEEEEEEEEEEEEEE "+e);
 			Line2D.Double e_line = new Line2D.Double(impactedge.x1, impactedge.y1, impactedge.x2, impactedge.y2);
 
 			if (smallestDistance != lastSmallestDistance)
