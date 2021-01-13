@@ -376,6 +376,8 @@ public class RigidBodyCollisionHandler implements Runnable {
 			rb.v.set(vr);
 
 		}
+		
+		rb.groundSlidingEdge = ip.impactEdgeLine;
 
 	}
 

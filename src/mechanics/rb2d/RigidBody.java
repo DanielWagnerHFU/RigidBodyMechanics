@@ -86,6 +86,8 @@ public class RigidBody {
 	public Line2D.Double lastImpactEdge;
 	@Ignore
 	public Vector2D slidingEdge;
+	@Ignore
+	public Line2D.Double groundSlidingEdge;
 
 	public RigidBody(double m, Vector2D r, Vector2D v, Vector2D a, double I, double phi, double omega, double alpha,
 			AbstractShape shape) {
@@ -167,6 +169,7 @@ public class RigidBody {
 
 	public void collisionWithRigidBodyCheck(AfterEventDescription aed, RigidBody r2, double t,
 			RigidBody[] rigidBodies) {
+
 		if (this.in(r2)) {
 			Runnable handler = new RigidBodyCollisionHandler(impactpoint(r2));
 			aed.reportEvent(handler, "collision of rigidbodies: ", this.r.toString(), r2.r.toString());
@@ -177,18 +180,24 @@ public class RigidBody {
 	}
 
 	public void startFalling(RigidBody rb, Impactpoint ip, AfterEventDescription aed) {
+		System.out.println("Ground sliding " + rb.lastImpactEdge.x1 + " " + rb.lastImpactEdge.y1 + " "
+				+ rb.lastImpactEdge.x2 + " " + rb.lastImpactEdge.y2);
 		double delta = 0;
 		if (Polygon.class.isAssignableFrom(this.shape.getClass()))
 			delta = 0.5;
 		else if (Polygon.class.isAssignableFrom(this.shape.getClass()))
 			delta = 0.5;
-		if ((rb.r.x - delta > rb.lastImpactEdge.x1 && rb.r.x - delta > rb.lastImpactEdge.x2)) {
-			Runnable handler = new RigidBodyStartsFallingHandler(rb, ip.impactEdgeLine);
-			aed.reportEvent(handler, "Circle Starts falling ", rb.r.toString());
-		} else if (rb.r.x + delta < rb.lastImpactEdge.x1 && rb.r.x + delta < rb.lastImpactEdge.x2) {
-			Runnable handler = new RigidBodyStartsFallingHandler(rb, ip.impactEdgeLine);
-			aed.reportEvent(handler, "Circle Starts falling ", rb.r.toString());
+		if (rb.lastImpactEdge.x1 != rb.lastImpactEdge.x2) {
+			if (rb.r.x - delta > rb.lastImpactEdge.x1 && rb.r.x - delta > rb.lastImpactEdge.x2) {
+				Runnable handler = new RigidBodyStartsFallingHandler(rb, ip.impactEdgeLine);
+
+				aed.reportEvent(handler, "Circle Starts falling ", rb.r.toString());
+			} else if (rb.r.x + delta < rb.lastImpactEdge.x1 && rb.r.x + delta < rb.lastImpactEdge.x2) {
+				Runnable handler = new RigidBodyStartsFallingHandler(rb, ip.impactEdgeLine);
+				aed.reportEvent(handler, "Circle Starts falling ", rb.r.toString());
+			}
 		}
+
 	}
 
 	public Impactpoint impactpoint(RigidBody r2) {
