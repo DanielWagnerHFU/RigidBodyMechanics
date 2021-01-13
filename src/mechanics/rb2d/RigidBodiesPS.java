@@ -28,7 +28,7 @@ public class RigidBodiesPS extends PhysicalSystem {
 	}
 
 	private void test14() {
-List<RigidBody> rigidBodies = new ArrayList<RigidBody>();
+		List<RigidBody> rigidBodies = new ArrayList<RigidBody>();
 		
 		rigidBodies.add(new RigidBody(new Rectangle(), 1.5, new Vector2D(-2, 1), new Vector2D(1, 0),
 				new Vector2D(0, 0), Math.PI/7, 0, 0));
