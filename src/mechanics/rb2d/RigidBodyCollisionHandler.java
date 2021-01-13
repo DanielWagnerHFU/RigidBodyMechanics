@@ -157,10 +157,10 @@ public class RigidBodyCollisionHandler implements Runnable {
 						rb_p.v.y += 0.1;
 						if (rb_p.r.x > ip.impactPoint.x) {
 //							rb_p.omega = getTorque(rb_p, ip.impactPoint);
-							rb_p.omega = 0.01;
+							rb_p.omega = -0.1;
 						} else {
 //							rb_p.omega = -getTorque(rb_p, ip.impactPoint);
-							rb_p.omega = -0.01;
+							rb_p.omega = 0.1;
 						}
 						return;
 					}
