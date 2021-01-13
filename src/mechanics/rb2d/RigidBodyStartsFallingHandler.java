@@ -39,9 +39,11 @@ public class RigidBodyStartsFallingHandler implements Runnable {
 			}
 			System.out.println(rb.v.y);
 			if (rb.r.x > impactEdge.x1 && rb.r.x > impactEdge.x2) {
-				rb.phi -= Math.toRadians(5);
+//				rb.phi -= Math.toRadians(5);
+				rb.omega = -1;
 			} else {
-				rb.phi += Math.toRadians(5);
+//				rb.phi += Math.toRadians(5);
+				rb.omega = 1;
 			}
 		} else {
 			// Circle
