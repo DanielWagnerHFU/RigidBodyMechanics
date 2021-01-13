@@ -45,7 +45,7 @@ public class RigidBodiesPS extends PhysicalSystem {
 				Double.MAX_VALUE, 0.1, 0, 0, false, new Rectangle(6, 0.2)));
 
 
-		rigidBodies.add(new RigidBody(new Rectangle(1.0, 0.6), 1, new Vector2D(1, 3.5), new Vector2D(0, 0),
+		rigidBodies.add(new RigidBody(new Circle(0.6), 1, new Vector2D(1, 3.5), new Vector2D(0, 0),
 				new Vector2D(0, -9.81), 0.6, 0, 0));
 //		rigidBodies.add(new RigidBody(new Triangle(1.0, 0.6), 1, new Vector2D(-4, 1.5), new Vector2D(3, 0),
 //				new Vector2D(0, -9.81), 0.6, 0, 0));

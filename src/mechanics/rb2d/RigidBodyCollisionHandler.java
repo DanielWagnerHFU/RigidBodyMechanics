@@ -95,7 +95,7 @@ public class RigidBodyCollisionHandler implements Runnable {
 //				System.out.println("Stopped: " + "v1r.x=" + v1r.x + ", v2r.x=" + v2r.x);
 //		}
 
-		if (Polygon.class.isAssignableFrom(rb_p.shape.getClass())) {
+		if (Polygon.class.isAssignableFrom(rb_p.shape.getClass()) && rb_p.dynamic) {
 //			System.out.println("----V.abs " + Math.abs(v1r.x));
 			if (Math.abs(v1r.x) < 0.5) {
 				if (linesAreParallel(ip, rb_p)) {
@@ -116,7 +116,7 @@ public class RigidBodyCollisionHandler implements Runnable {
 			}
 
 		}
-		if (Circle.class.isAssignableFrom(rb_p.shape.getClass())) {
+		if (Circle.class.isAssignableFrom(rb_p.shape.getClass()) && rb_p.dynamic) {
 			if (Math.abs(v1r.x) < 0.1) {
 //				System.out.println("start Rrolling");
 				startSliding(rb_p, collisionEdge);
@@ -147,15 +147,15 @@ public class RigidBodyCollisionHandler implements Runnable {
 		Vector2D V1r_ = rotateVector2D(V1r, -rot);
 		Vector2D V2r_ = rotateVector2D(V2r, -rot);
 
-		if(!rb_p.dynamic) {
-			V1r_.set(0,0);
+		if (!rb_p.dynamic) {
+			V1r_.set(0, 0);
 			Omega1 = 0;
 		}
-		if(!rb_e.dynamic) {
-			V2r_.set(0,0);
+		if (!rb_e.dynamic) {
+			V2r_.set(0, 0);
 			Omega2 = 0;
 		}
-		
+
 		// 4. Setzen der neuen Werte
 
 		if (impactCoords) {
