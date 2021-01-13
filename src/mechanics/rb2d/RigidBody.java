@@ -162,6 +162,9 @@ public class RigidBody {
 					state = BodyState.STOPPED;
 				}
 			}
+			
+			
+			
 			if (v.x > 0)
 				direction = BodyDirection.RIGHT;
 			else if (v.x < 0)
