@@ -184,8 +184,7 @@ public class RigidBodyCollisionHandler implements Runnable {
 		if (ip.impactEdgeLine != null) {
 			rb_p.lastImpactEdge.setLine(ip.impactEdgeLine.x1, ip.impactEdgeLine.y1, ip.impactEdgeLine.x2,
 					ip.impactEdgeLine.y2);
-		}
-	}
+		}	}
 
 	private boolean rbIsUpside(RigidBody r1, Line2D.Double impactEdge) {
 		if (r1.r.y > impactEdge.y1 || r1.r.y > impactEdge.y2)
@@ -353,15 +352,26 @@ public class RigidBodyCollisionHandler implements Runnable {
 			} else {
 				rb.state = BodyState.STOPPED;
 			}
+			
+			
+			
 
 			Vector2D vr = new Vector2D(rb.v.x, 0);
 			double helper = VectorMath.angle(vr, rb.a);
 
-			if (rb.a.x < 0)
+			if (rb.v.x < 0)
+				helper = -helper;
+			
+			if (rb.a.x < 0) {
 				vr = rotateVector2D(vr, helper);
-			else {
+			}else {
 				vr = rotateVector2D(vr, -helper);
 			}
+			if (rb.v.x < 0 && vr.x > 0 || rb.v.x > 0 && vr.x < 0) {
+				vr.invert();
+			}
+			
+		
 
 			rb.v.set(vr);
 
