@@ -190,7 +190,6 @@ public class RigidBody {
 		if (rb.lastImpactEdge.x1 != rb.lastImpactEdge.x2) {
 			if (rb.r.x - delta > rb.lastImpactEdge.x1 && rb.r.x - delta > rb.lastImpactEdge.x2) {
 				Runnable handler = new RigidBodyStartsFallingHandler(rb, ip.impactEdgeLine);
-
 				aed.reportEvent(handler, "Circle Starts falling ", rb.r.toString());
 			} else if (rb.r.x + delta < rb.lastImpactEdge.x1 && rb.r.x + delta < rb.lastImpactEdge.x2) {
 				Runnable handler = new RigidBodyStartsFallingHandler(rb, ip.impactEdgeLine);
