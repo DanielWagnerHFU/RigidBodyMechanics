@@ -169,7 +169,6 @@ public class RigidBody {
 
 	public void collisionWithRigidBodyCheck(AfterEventDescription aed, RigidBody r2, double t,
 			RigidBody[] rigidBodies) {
-
 		if (this.in(r2)) {
 			Runnable handler = new RigidBodyCollisionHandler(impactpoint(r2));
 			aed.reportEvent(handler, "collision of rigidbodies: ", this.r.toString(), r2.r.toString());
