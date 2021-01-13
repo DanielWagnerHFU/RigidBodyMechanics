@@ -220,11 +220,11 @@ public class RigidBodyCollisionHandler implements Runnable {
 
 //		System.out.println("AngelPre " + angleEdgeToPre);
 //		System.out.println("AngelNext " + angleEdgeToNext);
-
-		if (angleEdgeToPre >= 0 && angleEdgeToPre <= 2 || angleEdgeToPre >= 178 && angleEdgeToPre <= 182) {
+		double delta = 2;
+		if (angleEdgeToPre >= 0 && angleEdgeToPre <= delta || angleEdgeToPre >= 180-delta && angleEdgeToPre <= 180 +delta) {
 			rb_p.slidingEdge = (edgeToPre);
 			return true;
-		} else if (angleEdgeToNext >= 0 && angleEdgeToNext <= 2 || angleEdgeToNext >= 178 && angleEdgeToNext <= 182) {
+		} else if (angleEdgeToNext >= 0 && angleEdgeToNext <= delta || angleEdgeToNext >= 180-delta && angleEdgeToNext <= 180 +delta) {
 			rb_p.slidingEdge = (edgeToNext);
 			return true;
 		}
