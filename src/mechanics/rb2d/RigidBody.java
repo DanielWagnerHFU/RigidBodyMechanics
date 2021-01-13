@@ -157,8 +157,10 @@ public class RigidBody {
 
 			// STOP PLANE
 			if (direction == BodyDirection.LEFT && v.x > 0 || direction == BodyDirection.RIGHT && v.x < 0) {
-				if (Fh.abs() == 0)
+				if (Fh.abs() == 0) {
+					System.out.println("Fh = 0 --> STOPPED");
 					state = BodyState.STOPPED;
+				}
 			}
 			if (v.x > 0)
 				direction = BodyDirection.RIGHT;
@@ -179,8 +181,6 @@ public class RigidBody {
 	}
 
 	public void startFalling(RigidBody rb, Impactpoint ip, AfterEventDescription aed) {
-		System.out.println("Ground sliding " + rb.lastImpactEdge.x1 + " " + rb.lastImpactEdge.y1 + " "
-				+ rb.lastImpactEdge.x2 + " " + rb.lastImpactEdge.y2);
 		double delta = 0;
 		if (Polygon.class.isAssignableFrom(this.shape.getClass()))
 			delta = 0.5;
@@ -243,10 +243,8 @@ public class RigidBody {
 
 			Vector2D p = new Vector2D(impactpoint.x, impactpoint.y);
 			Vector2D e = new Vector2D(impactedge.x2 - impactedge.x1, impactedge.y2 - impactedge.y1);
-//			System.out.println("EEEEEEEEEEEEEEE "+e);
 			if(e.x <0)
 				e.invert();
-//			System.out.println("EEEEEEEEEEEEEEE "+e);
 			Line2D.Double e_line = new Line2D.Double(impactedge.x1, impactedge.y1, impactedge.x2, impactedge.y2);
 
 			if (smallestDistance != lastSmallestDistance)
