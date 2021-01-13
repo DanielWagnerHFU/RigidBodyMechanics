@@ -25,11 +25,10 @@ public class RigidBodiesPS extends PhysicalSystem {
 	public double E_gesamt;
 
 	public RigidBodiesPS() {
-		test_sliding_left();
+//		test_sliding_left();
 //		test_sliding_right();
 //		test_sliding_plane();
-//		test_rolling_incline_left();
-//		test_rolling_incline_right();
+		test_sliding_ultimate();
 
 	}
 
@@ -43,10 +42,10 @@ public class RigidBodiesPS extends PhysicalSystem {
 				Double.MAX_VALUE, Math.PI / 2, 0, 0, false, new Rectangle(10.5, 1)));
 		
 		rigidBodies.add(new RigidBody(Double.MAX_VALUE, new Vector2D(-1, 2.5), new Vector2D(0, 0), new Vector2D(0, 0),
-				Double.MAX_VALUE, -0.1, 0, 0, false, new Rectangle(6, 0.2)));
+				Double.MAX_VALUE, 0.1, 0, 0, false, new Rectangle(6, 0.2)));
 
 
-		rigidBodies.add(new RigidBody(new Rectangle(1.0, 0.6), 1, new Vector2D(-2.5, 3.5), new Vector2D(1, 0),
+		rigidBodies.add(new RigidBody(new Rectangle(1.0, 0.6), 1, new Vector2D(1, 3.5), new Vector2D(0, 0),
 				new Vector2D(0, -9.81), 0.6, 0, 0));
 //		rigidBodies.add(new RigidBody(new Triangle(1.0, 0.6), 1, new Vector2D(-4, 1.5), new Vector2D(3, 0),
 //				new Vector2D(0, -9.81), 0.6, 0, 0));

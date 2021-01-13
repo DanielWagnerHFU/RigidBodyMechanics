@@ -147,7 +147,15 @@ public class RigidBodyCollisionHandler implements Runnable {
 		Vector2D V1r_ = rotateVector2D(V1r, -rot);
 		Vector2D V2r_ = rotateVector2D(V2r, -rot);
 
-
+		if(!rb_p.dynamic) {
+			V1r_.set(0,0);
+			Omega1 = 0;
+		}
+		if(!rb_e.dynamic) {
+			V2r_.set(0,0);
+			Omega2 = 0;
+		}
+		
 		// 4. Setzen der neuen Werte
 
 		if (impactCoords) {
