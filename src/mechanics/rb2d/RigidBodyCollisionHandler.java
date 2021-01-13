@@ -98,7 +98,6 @@ public class RigidBodyCollisionHandler implements Runnable {
 		if (Polygon.class.isAssignableFrom(rb_p.shape.getClass())) {
 //			System.out.println("----V.abs " + Math.abs(v1r.x));
 			if (Math.abs(v1r.x) < 0.5) {
-
 				if (linesAreParallel(ip, rb_p)) {
 					if (rbIsUpside(rb_p, ip.impactEdgeLine)) {
 						System.err.println("Parallel");
@@ -125,6 +124,13 @@ public class RigidBodyCollisionHandler implements Runnable {
 			}
 		}
 
+		System.out.println(v1r);
+		if (Math.abs(v1r.x) + Math.abs(v2r.x) < 0.01) {
+			rb_p.state = BodyState.STOPPED;
+			rb_e.state = BodyState.STOPPED;
+			return;
+		}
+
 		// 2. Berechnung der neuen Größen im Stoßkoordinatensystem
 		double a1 = -r1mr.y;
 		double a2 = -r2mr.y;
@@ -141,10 +147,6 @@ public class RigidBodyCollisionHandler implements Runnable {
 		Vector2D V1r_ = rotateVector2D(V1r, -rot);
 		Vector2D V2r_ = rotateVector2D(V2r, -rot);
 
-//		if (V1r_.abs() < 0.1)
-//			rb_p.state = BodyState.STOPPED;
-//		if (V2r_.abs() < 0.1)
-//			rb_e.state = BodyState.STOPPED;
 
 		// 4. Setzen der neuen Werte
 
