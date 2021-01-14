@@ -105,6 +105,7 @@ public class RigidBodyCollisionHandler implements Runnable {
 
 //		if (rbIsUpside(rb_p, ip.impactEdgeLine)) {
 //		System.out.println("Upside");
+
 		if (Polygon.class.isAssignableFrom(rb_p.shape.getClass()) && rb_p.dynamic) {
 			System.out.println("Poly");
 			System.out.println("V1r.x " + V1r.x);
@@ -119,13 +120,27 @@ public class RigidBodyCollisionHandler implements Runnable {
 					rb_p.v.y += 0.2;
 					if (rb_p.r.x > ip.impactPoint.x) {
 						System.out.println("A");
-						rb_p.omega -= 1;
+						rb_p.omega = -1;
 					} else {
 						System.out.println("B");
-						rb_p.omega += 1;
+						rb_p.omega = 1;
 					}
 					return;
 				}
+			} else {
+				
+//				double Ekin_before = getEkinErot(rb_p.m, V1r.abs());
+//				double Erot_before = getEkinErot(rb_p.I, rb_p.omega);
+				
+				V1r.x += 0.0001;
+				
+//				double Ekin_after = getEkinErot(rb_p.m, V1r.abs());
+//				
+//				double Ekin_differenz = Ekin_before-Ekin_after;
+//				
+//				rb_p.omega = -Math.sqrt(2*rb_p.I*(Erot_before - Ekin_differenz));
+				
+				// Ekin die hier drauf kommt muss von Erot abgezogen werden
 			}
 		}
 //		}
@@ -217,6 +232,14 @@ public class RigidBodyCollisionHandler implements Runnable {
 //			}
 //		}
 //		return false;
+//	}
+
+	private double getEkinErot(double m_i, double v_omega) {
+		return 0.5 * m_i * v_omega * v_omega;
+	}
+
+//	private void ECompensation(double m, double v, double i, double omega) {
+//	
 //	}
 
 	private double getTorque(RigidBody rb, Vector2D ip) {

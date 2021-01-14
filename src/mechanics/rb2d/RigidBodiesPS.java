@@ -29,6 +29,7 @@ public class RigidBodiesPS extends PhysicalSystem {
 //		test_sliding_right();
 //		test_sliding_plane();
 		test_sliding_ultimate();
+//		test_random();
 
 	}
 
@@ -45,15 +46,11 @@ public class RigidBodiesPS extends PhysicalSystem {
 				Double.MAX_VALUE, -0.1, 0, 0, false, new Rectangle(6, 0.2)));
 
 
-		rigidBodies.add(new RigidBody(new Rectangle(0.6), 1, new Vector2D(-1, 0), new Vector2D(3, 0),
+		rigidBodies.add(new RigidBody(new Rectangle(0.6), 1, new Vector2D(-1, 0), new Vector2D(-3, 0),
 				new Vector2D(0, -9.81), 0.6, 0, 0));
-		rigidBodies.add(new RigidBody(new Triangle(1.0, 0.6), 1, new Vector2D(-4, 1.5), new Vector2D(-1, 0),
+		rigidBodies.add(new RigidBody(new Triangle(1, 3), 1, new Vector2D(1, 4), new Vector2D(-1, 0),
 				new Vector2D(0, -9.81), 0.6, 0, 0));
-	
-//		rigidBodies.add(new RigidBody(new Circle(0.5), 0.2, new Vector2D(-3, 4), new Vector2D(4, 1),
-//				new Vector2D(0, -9.81), 0.6, 0, 0));
-//		rigidBodies.add(new RigidBody(new Circle(0.4), 0.2, new Vector2D(0,-1), new Vector2D(0,0),
-//				new Vector2D(0, -9.81), 0.4, 0, 0));
+			
 
 		this.rigidBodies = new RigidBody[rigidBodies.size()];
 		this.rigidBodies = rigidBodies.toArray(this.rigidBodies);
@@ -209,12 +206,12 @@ public class RigidBodiesPS extends PhysicalSystem {
 
 	private void test_random() {
 		List<RigidBody> rigidBodies = new ArrayList<RigidBody>();
-		rigidBodies.add(new RigidBody(Double.MAX_VALUE, new Vector2D(0, -5), new Vector2D(0, 0), new Vector2D(0, 0),
+		rigidBodies.add(new RigidBody(Double.MAX_VALUE, new Vector2D(0, 0), new Vector2D(0, 0), new Vector2D(0, 0),
 				Double.MAX_VALUE, 0, 0, 0, false, new Rectangle(10.5, 1)));
 		MyRandom random = new MyRandom();
 		while (rigidBodies.size() < 2) {
 			AbstractShape shape = RandomPolygonBuilder.getPolygon((int) random.getNextHalfNormalDistribution(3, 4));
-			RigidBody rb = new RigidBody(shape, 1, new Vector2D(0, 0), new Vector2D(0, 0), new Vector2D(0, -9), 0, 0,
+			RigidBody rb = new RigidBody(shape, 1, new Vector2D(0, 4), new Vector2D(-1.5, 0), new Vector2D(0, -9), 0, 0,
 					0);
 
 			while (rbIntersects(rb, rigidBodies)) {
