@@ -14,6 +14,7 @@ import mechanics.rb2d.misc.BodyState;
 import mechanics.rb2d.shapes.AbstractShape;
 import mechanics.rb2d.shapes.Circle;
 import mechanics.rb2d.shapes.Polygon;
+import mechanics.rb2d.shapes.Rectangle;
 
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
@@ -88,14 +89,25 @@ public class RigidBody {
 	public Vector2D slidingEdge;
 	@Ignore
 	public Line2D.Double groundSlidingEdge;
+	@Ignore
+	private double mu_h;
+	@Ignore
+	private double mu;
 
 	public RigidBody(double m, Vector2D r, Vector2D v, Vector2D a, double I, double phi, double omega, double alpha,
 			AbstractShape shape) {
-		this(m, r, v, a, I, phi, omega, alpha, true, shape);
+		this(m, r, v, a, I, phi, omega, alpha, true, shape, 0.5, 0.4);
 	}
-
+	
 	public RigidBody(double m, Vector2D r, Vector2D v, Vector2D a, double I, double phi, double omega, double alpha,
 			boolean dynamic, AbstractShape shape) {
+		this(m, r, v, a, I, phi, omega, alpha, dynamic, shape, 0.5, 0.4);
+	}
+	
+	
+
+	public RigidBody(double m, Vector2D r, Vector2D v, Vector2D a, double I, double phi, double omega, double alpha,
+			boolean dynamic, AbstractShape shape, double mu_h, double mu) {
 		count++;
 		this.uid = count;
 		this.m = m;
@@ -108,13 +120,20 @@ public class RigidBody {
 		this.alpha = alpha;
 		this.shape = shape;
 		this.state = BodyState.FLYING;
+		this.mu_h = mu_h;
+		this.mu = mu;
 		this.dynamic = dynamic;
 		this.lastImpactEdge = new Line2D.Double(Double.MIN_VALUE, Double.MIN_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
 	}
 
 	public RigidBody(AbstractShape shape, double m, Vector2D r, Vector2D v, Vector2D a, double phi, double omega,
 			double alpha) {
-		this(m, r, v, a, shape.getI(m), phi, omega, alpha, true, shape);
+		this(m, r, v, a, shape.getI(m), phi, omega, alpha, true, shape, 0.5, 0.4);
+	}
+	
+	public RigidBody(AbstractShape shape, double m, Vector2D r, Vector2D v, Vector2D a, double phi, double omega,
+			double alpha, double mu_h, double mu) {
+		this(m, r, v, a, shape.getI(m), phi, omega, alpha, true, shape, mu_h, mu);
 	}
 
 	public RigidBody(AbstractShape shape, Vector2D r, double phi) {
@@ -122,6 +141,9 @@ public class RigidBody {
 		this.r = r;
 		this.phi = phi;
 	}
+
+	
+
 
 	public void f(double t, double dt) {
 		E_kin = 0.5 * m * v.abs() * v.abs();

@@ -28,9 +28,32 @@ public class RigidBodiesPS extends PhysicalSystem {
 //		test_sliding_left();
 //		test_sliding_right();
 //		test_sliding_plane();
-		test_sliding_ultimate();
+		test_sliding_mu();
 //		test_random();
 
+	}
+	
+	private void test_sliding_mu() {
+		List<RigidBody> rigidBodies = new ArrayList<RigidBody>();
+		rigidBodies.add(new RigidBody(Double.MAX_VALUE, new Vector2D(0, -2), new Vector2D(0, 0), new Vector2D(0, 0),
+				Double.MAX_VALUE, -0.1, 0, 0, false, new Rectangle(10.5, 1)));
+		rigidBodies.add(new RigidBody(Double.MAX_VALUE, new Vector2D(6, -2), new Vector2D(0, 0), new Vector2D(0, 0),
+				Double.MAX_VALUE, Math.PI / 2-0.1, 0, 0, false, new Rectangle(10.5, 1)));
+		rigidBodies.add(new RigidBody(Double.MAX_VALUE, new Vector2D(-6, -2), new Vector2D(0, 0), new Vector2D(0, 0),
+				Double.MAX_VALUE, Math.PI / 2, 0, 0, false, new Rectangle(10.5, 1)));
+		
+		rigidBodies.add(new RigidBody(Double.MAX_VALUE, new Vector2D(-1, 2.5), new Vector2D(0, 0), new Vector2D(0, 0),
+				Double.MAX_VALUE, -0.1, 0, 0, false, new Rectangle(6, 0.2)));
+
+
+		rigidBodies.add(new RigidBody(new Rectangle(0.6), 1, new Vector2D(-1, 0), new Vector2D(-3, 0),
+				new Vector2D(0, -9.81), 0.6, 0, 0, 0.5, 0.4));
+		rigidBodies.add(new RigidBody(new Triangle(1, 3), 1, new Vector2D(1, 4), new Vector2D(-1, 0),
+				new Vector2D(0, -9.81), 0.6, 0, 0));
+			
+
+		this.rigidBodies = new RigidBody[rigidBodies.size()];
+		this.rigidBodies = rigidBodies.toArray(this.rigidBodies);
 	}
 
 	private void test_sliding_ultimate() {
