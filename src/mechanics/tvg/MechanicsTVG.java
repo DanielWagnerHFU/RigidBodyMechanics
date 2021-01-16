@@ -70,12 +70,13 @@ public class MechanicsTVG extends TVG {
 		StructureElement a = sub(se, "a");
 		StructureElement Fh = sub(se, "Fh");
 		StructureElement Fr = sub(se, "Fr");
-		if (r == null || v == null || a == null || Fh == null || Fr == null)
+		StructureElement Fn = sub(se, "Fn");
+		if (r == null || v == null || a == null || Fh == null || Fr == null || Fn == null)
 			return;
 		double m = subDoubleValue(se, "m", 0);
 		double radius = subDoubleValue(se, "radius", 0);
 		pms.add(new PM2D(se.getObject(), sub(r, "x"), sub(r, "y"), sub(v, "x"), sub(v, "y"), sub(a, "x"), sub(a, "y"),
-				sub(Fh, "x"), sub(Fh, "y"), sub(Fr, "x"), sub(Fr, "y"), m, radius, se.getTotalName()));
+				sub(Fh, "x"), sub(Fh, "y"), sub(Fr, "x"), sub(Fr, "y"), sub(Fn, "x"), sub(Fn, "y"), m, radius, se.getTotalName()));
 	}
 
 	public void initSP2D(StructureElement se) {
@@ -146,27 +147,7 @@ public class MechanicsTVG extends TVG {
 		return showAcceleration;
 	}
 
-	@Parameter(path = "mechanics.translational movement")
-	public boolean showFh = true;
-
-	@Parameter(path = "mechanics.translational movement")
-	@Slider(min = 1, max = 30, step = 0.2)
-	public double FhScaling = 0.2;
-
-	public boolean enabledFhScaling() {
-		return showFh;
-	}
-
-	@Parameter(path = "mechanics.translational movement")
-	public boolean showFr = true;
-
-	@Parameter(path = "mechanics.translational movement")
-	@Slider(min = 1, max = 30, step = 0.2)
-	public double FrScaling = 0.2;
-
-	public boolean enabledFrScaling() {
-		return showFr;
-	}
+	
 
 	@Parameter(path = "mechanics.translational movement")
 	@Slider(min = 20, max = 30)
@@ -195,6 +176,39 @@ public class MechanicsTVG extends TVG {
 	@Slider(min = 20, max = 70)
 	public double rotationDisplayRadius = 35;
 
+	
+	@Parameter(path = "mechanics.Forces")
+	public boolean showFh = true;
+
+	@Parameter(path = "mechanics.Forces")
+	@Slider(min = 1, max = 30, step = 0.2)
+	public double FhScaling = 0.2;
+
+	public boolean enabledFhScaling() {
+		return showFh;
+	}
+
+	@Parameter(path = "mechanics.Forces")
+	public boolean showFr = true;
+
+	@Parameter(path = "mechanics.Forces")
+	@Slider(min = 1, max = 30, step = 0.2)
+	public double FrScaling = 0.2;
+
+	public boolean enabledFrScaling() {
+		return showFr;
+	}
+	
+	@Parameter(path = "mechanics.Forces")
+	public boolean showFn = true;
+
+	@Parameter(path = "mechanics.Forces")
+	@Slider(min = 1, max = 30, step = 0.2)
+	public double FnScaling = 0.2;
+
+	public boolean enabledFnScaling() {
+		return showFn;
+	}
 	// Painting
 
 	public void beginTransformationToPointPX(Vector2D p) {
@@ -402,6 +416,10 @@ public class MechanicsTVG extends TVG {
 			if (showFr) {
 				Vector2D a = new Vector2D(recorder.getDouble(p.Frx, c), recorder.getDouble(p.Fry, c));
 				drawArrow(r, a, FrScaling, standardStrokeColor, ArrowHead.DOUBLE);
+			}
+			if (showFn) {
+				Vector2D a = new Vector2D(recorder.getDouble(p.Fnx, c), recorder.getDouble(p.Fny, c));
+				drawArrow(r, a, FnScaling, standardStrokeColor, ArrowHead.DOUBLE);
 			}
 
 			style.fillColor = standardFillColor;

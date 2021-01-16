@@ -13,8 +13,8 @@ public class PM2D {
 	public String name;
 
 	public PM2D(Object object, StructureElement rx, StructureElement ry, StructureElement vx, StructureElement vy,
-			StructureElement ax, StructureElement ay, StructureElement Fhx,	StructureElement Fhy, StructureElement Frx,	StructureElement Fry, double m, double radius,
-			String name) {
+			StructureElement ax, StructureElement ay, StructureElement Fhx, StructureElement Fhy, StructureElement Frx,
+			StructureElement Fry, StructureElement Fnx, StructureElement Fny, double m, double radius, String name) {
 		super();
 		this.object = object;
 		this.rx = rx;
