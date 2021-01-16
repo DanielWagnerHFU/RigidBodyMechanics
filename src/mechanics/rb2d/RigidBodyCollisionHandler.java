@@ -117,7 +117,7 @@ public class RigidBodyCollisionHandler implements Runnable {
 					return;
 				} else {
 					System.out.println("nocht para");
-					rb_p.v.y += 0.2;
+					rb_p.v.y += 0.5;
 					if (rb_p.r.x > ip.impactPoint.x) {
 						System.out.println("A");
 						rb_p.omega = -1;
@@ -128,18 +128,18 @@ public class RigidBodyCollisionHandler implements Runnable {
 					return;
 				}
 			} else {
-				
+
 //				double Ekin_before = getEkinErot(rb_p.m, V1r.abs());
 //				double Erot_before = getEkinErot(rb_p.I, rb_p.omega);
-				
+
 				V1r.x += 0.0001;
-				
+
 //				double Ekin_after = getEkinErot(rb_p.m, V1r.abs());
 //				
 //				double Ekin_differenz = Ekin_before-Ekin_after;
 //				
 //				rb_p.omega = -Math.sqrt(2*rb_p.I*(Erot_before - Ekin_differenz));
-				
+
 				// Ekin die hier drauf kommt muss von Erot abgezogen werden
 			}
 		}
@@ -353,13 +353,19 @@ public class RigidBodyCollisionHandler implements Runnable {
 		rb.omega = 0;
 		rb.alpha = 0;
 //		rb.r.y += 1;
+		if (rb.v.abs() <= 0.01)
+			friction = rb.mu_h;
+		else
+			friction = rb.mu;
+
+		System.out.println("Friction " + friction);
 
 		// Plane
 		if (collisionEdge.y == 0) {
 			rb.Fr.x = -9.81 * rb.m * friction * (signum(rb.v.x));
 			rb.v.y = 0;
 			rb.a.set(rb.Fr.x / rb.m, 0);
-		} else {
+		} else if (rb.v.abs() > 0.1) {
 			// Incline
 //			System.out.println("pos " + rb.r);
 			System.out.println("Incline");
@@ -390,6 +396,10 @@ public class RigidBodyCollisionHandler implements Runnable {
 			double Fry = FnA * sin(angle) * friction * (-signum(rb.Fh.y));
 
 			rb.Fr.set(Frx, Fry);
+
+			System.out.println("FH " + rb.Fh.abs());
+			System.out.println("FR " + rb.Fr.abs());
+//			if (rb.Fh.abs() > rb.Fr.abs()) {
 //
 			rb.a.x = rb.Fh.x / rb.m;
 			rb.a.y = rb.Fh.y / rb.m;
@@ -402,6 +412,7 @@ public class RigidBodyCollisionHandler implements Runnable {
 			if (Math.signum(vr.x) != Math.signum(rb.v.x))
 				vr.invert();
 			rb.v.set(vr);
+//			}
 
 		}
 

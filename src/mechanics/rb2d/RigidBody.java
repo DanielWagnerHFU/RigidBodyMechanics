@@ -90,21 +90,19 @@ public class RigidBody {
 	@Ignore
 	public Line2D.Double groundSlidingEdge;
 	@Ignore
-	private double mu_h;
+	public double mu_h;
 	@Ignore
-	private double mu;
+	public double mu;
 
 	public RigidBody(double m, Vector2D r, Vector2D v, Vector2D a, double I, double phi, double omega, double alpha,
 			AbstractShape shape) {
 		this(m, r, v, a, I, phi, omega, alpha, true, shape, 0.5, 0.4);
 	}
-	
+
 	public RigidBody(double m, Vector2D r, Vector2D v, Vector2D a, double I, double phi, double omega, double alpha,
 			boolean dynamic, AbstractShape shape) {
 		this(m, r, v, a, I, phi, omega, alpha, dynamic, shape, 0.5, 0.4);
 	}
-	
-	
 
 	public RigidBody(double m, Vector2D r, Vector2D v, Vector2D a, double I, double phi, double omega, double alpha,
 			boolean dynamic, AbstractShape shape, double mu_h, double mu) {
@@ -130,7 +128,7 @@ public class RigidBody {
 			double alpha) {
 		this(m, r, v, a, shape.getI(m), phi, omega, alpha, true, shape, 0.5, 0.4);
 	}
-	
+
 	public RigidBody(AbstractShape shape, double m, Vector2D r, Vector2D v, Vector2D a, double phi, double omega,
 			double alpha, double mu_h, double mu) {
 		this(m, r, v, a, shape.getI(m), phi, omega, alpha, true, shape, mu_h, mu);
@@ -141,9 +139,6 @@ public class RigidBody {
 		this.r = r;
 		this.phi = phi;
 	}
-
-	
-
 
 	public void f(double t, double dt) {
 		E_kin = 0.5 * m * v.abs() * v.abs();
@@ -161,8 +156,22 @@ public class RigidBody {
 			direction = BodyDirection.NONE;
 		}
 
-		if (state == BodyState.SLIDING)
+		if (state == BodyState.SLIDING) {
 			omega = 0;
+			alpha = 0;
+
+			double friction;
+			if (v.abs() <= 0.01)
+				friction = mu_h;
+			else
+				friction = mu;
+			
+			System.out.println("FFFFRRRr "+ friction);
+			if (Fn.abs()*friction >= Fh.abs() && v.abs() < 0.01) {
+				state = BodyState.STOPPED;
+			
+			}
+		}
 		if (state == BodyState.ROLLING || state == BodyState.SLIDING) {
 			Fr.x = Math.abs(Fr.x) * signum(-v.x);
 			Fr.y = Math.abs(Fr.y) * signum(-v.y);
@@ -184,9 +193,7 @@ public class RigidBody {
 					state = BodyState.STOPPED;
 				}
 			}
-			
-			
-			
+
 			if (v.x > 0)
 				direction = BodyDirection.RIGHT;
 			else if (v.x < 0)
@@ -268,7 +275,7 @@ public class RigidBody {
 
 			Vector2D p = new Vector2D(impactpoint.x, impactpoint.y);
 			Vector2D e = new Vector2D(impactedge.x2 - impactedge.x1, impactedge.y2 - impactedge.y1);
-			if(e.x <0)
+			if (e.x < 0)
 				e.invert();
 			Line2D.Double e_line = new Line2D.Double(impactedge.x1, impactedge.y1, impactedge.x2, impactedge.y2);
 
