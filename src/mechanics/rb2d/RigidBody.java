@@ -165,17 +165,16 @@ public class RigidBody {
 				friction = mu_h;
 			else
 				friction = mu;
-			
-			System.out.println("FFFFRRRr "+ friction);
-			if (Fn.abs()*friction >= Fh.abs() && v.abs() < 0.01) {
+
+			if (Fn.abs() * friction >= Fh.abs() && v.abs() < 0.01) {
 				state = BodyState.STOPPED;
-			
+				System.out.println("Rigid Body " + uid + " stopped");
+
 			}
 		}
 		if (state == BodyState.ROLLING || state == BodyState.SLIDING) {
 			Fr.x = Math.abs(Fr.x) * signum(-v.x);
 			Fr.y = Math.abs(Fr.y) * signum(-v.y);
-//			v.y = 0;
 
 			if (direction == BodyDirection.LEFT && state == BodyState.ROLLING) {
 				omega = v.abs() / shape.getRadius();
@@ -189,8 +188,8 @@ public class RigidBody {
 			// STOP PLANE
 			if (direction == BodyDirection.LEFT && v.x > 0 || direction == BodyDirection.RIGHT && v.x < 0) {
 				if (Fh.abs() == 0) {
-					System.out.println("Fh = 0 --> STOPPED");
 					state = BodyState.STOPPED;
+					System.out.println("Rigid Body " + uid + " stopped");
 				}
 			}
 
