@@ -154,8 +154,8 @@ public class RigidBody {
 			omega = 0;
 			alpha = 0;
 			Fg.set(0,0);
-			Fh.set(0,0);
-			Fr.set(0,0);
+//			Fh.set(0,0);
+//			Fr.set(0,0);
 			Fn.set(0,0);
 			Fhr.set(0,0);
 			direction = BodyDirection.NONE;

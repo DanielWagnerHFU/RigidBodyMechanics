@@ -92,6 +92,7 @@ public class RigidBodyCollisionHandler implements Runnable {
 				startRolling(rb_p, collisionEdge);
 				return;
 			}
+
 		}
 
 		// 2. Berechnung der neuen Größen im Stoßkoordinatensystem
@@ -107,14 +108,9 @@ public class RigidBodyCollisionHandler implements Runnable {
 //		System.out.println("Upside");
 
 		if (Polygon.class.isAssignableFrom(rb_p.shape.getClass()) && rb_p.dynamic) {
-			System.out.println("Poly");
-			System.out.println("V1r.x " + V1r.x);
 			if (Math.abs(V1r.x) < 0.15) {
-				System.out.println("v kleiner");
 				if (linesAreParallel(ip, rb_p)) {
-					System.out.println("Para");
 					if (Math.abs(V1r.x) + Math.abs(V2r.x) < 0.01) {
-						System.out.println("stopping");
 						rb_p.state = BodyState.STOPPED;
 						rb_e.state = BodyState.STOPPED;
 						return;
@@ -123,34 +119,19 @@ public class RigidBodyCollisionHandler implements Runnable {
 						return;
 					}
 				} else {
-					System.out.println("nocht para");
 					rb_p.v.y += 0.3;
 					if (rb_p.r.x > ip.impactPoint.x) {
-						System.out.println("A");
 						rb_p.omega = -1;
 					} else {
-						System.out.println("B");
 						rb_p.omega = 1;
 					}
 					return;
 				}
 			} else {
-
-//				double Ekin_before = getEkinErot(rb_p.m, V1r.abs());
-//				double Erot_before = getEkinErot(rb_p.I, rb_p.omega);
-
 				V1r.x += 0.15;
-
-//				double Ekin_after = getEkinErot(rb_p.m, V1r.abs());
-//				
-//				double Ekin_differenz = Ekin_before-Ekin_after;
-//				
-//				rb_p.omega = -Math.sqrt(2*rb_p.I*(Erot_before - Ekin_differenz));
-
-				// Ekin die hier drauf kommt muss von Erot abgezogen werden
 			}
+
 		}
-//		}
 
 		double Omega1 = rb_p.omega + ((a1 * Fx) / rb_p.I);
 		double Omega2 = rb_e.omega - ((a2 * Fx) / rb_e.I);
@@ -213,40 +194,6 @@ public class RigidBodyCollisionHandler implements Runnable {
 			rb_p.lastImpactEdge.setLine(ip.impactEdgeLine.x1, ip.impactEdgeLine.y1, ip.impactEdgeLine.x2,
 					ip.impactEdgeLine.y2);
 		}
-	}
-
-//	private boolean rbIsUpside(RigidBody rb, Line2D.Double collisionEdge) {
-//		Polygon polygonShape = (Polygon) rb.shape;
-//		Point2D.Double[] vertices = verticesToInertialSystem(polygonShape.vertices, rb.phi, rb.r);
-//
-//		Point2D.Double vertexPre = getPreVertex(vertices, ip.impactPoint.x, ip.impactPoint.y);
-//		Point2D.Double vertexNext = getNextVertex(vertices, ip.impactPoint.x, ip.impactPoint.y);
-//		if (vertexPre.y < collisionEdge.y1 && vertexPre.y < collisionEdge.y2
-//				|| vertexNext.y < collisionEdge.y1 && vertexNext.y < collisionEdge.y2) {
-//			System.out.println("----unterhalb------");
-//		} else {
-//			System.out.println("----oberhalb------");
-//			if (rb.v.x > 0 && (vertexPre.x > collisionEdge.x1 && vertexPre.x > collisionEdge.x2
-//					|| vertexNext.x > collisionEdge.x1 && vertexNext.x > collisionEdge.x2)) {
-//				return true;
-//			}
-//		}
-//		return false;
-//	}
-
-	private double getEkinErot(double m_i, double v_omega) {
-		return 0.5 * m_i * v_omega * v_omega;
-	}
-
-//	private void ECompensation(double m, double v, double i, double omega) {
-//	
-//	}
-
-	private double getTorque(RigidBody rb, Vector2D ip) {
-		System.out.println("++++++++++++++++++");
-		rb.r.y += 0.1;
-		double dist = Math.abs(rb.r.x - ip.x);
-		return dist * rb.m * rb.g / 20;
 	}
 
 	private boolean linesAreParallel(Impactpoint ip, RigidBody rb) {
@@ -399,20 +346,24 @@ public class RigidBodyCollisionHandler implements Runnable {
 
 			System.out.println("FH " + rb.Fh.abs());
 			System.out.println("FR " + rb.Fr.abs());
-//			if (rb.Fh.abs() > rb.Fr.abs()) {
+			if (rb.Fh.abs() > rb.Fr.abs()) {
 //
-			rb.a.x = rb.Fh.x / rb.m;
-			rb.a.y = rb.Fh.y / rb.m;
+				rb.a.x = rb.Fh.x / rb.m;
+				rb.a.y = rb.Fh.y / rb.m;
 
-			double helper = VectorMath.angle(collisionEdge, rb.v);
-			Vector2D vr = rotateVector2D(rb.v, helper);
+				double helper = VectorMath.angle(collisionEdge, rb.v);
+				Vector2D vr = rotateVector2D(rb.v, helper);
 //			System.out.println(VectorMath.angle(vr, rb.a));
-			vr = VectorMath.mult(-1, vr);
+				vr = VectorMath.mult(-1, vr);
 
-			if (Math.signum(vr.x) != Math.signum(rb.v.x))
-				vr.invert();
-			rb.v.set(vr);
-//			}
+				if (Math.signum(vr.x) != Math.signum(rb.v.x))
+					vr.invert();
+				rb.v.set(vr);
+			} else {
+				rb.state = BodyState.STOPPED;
+				System.out.println("Rigid Body " + rb.uid + " stopped");
+
+			}
 
 		}
 
