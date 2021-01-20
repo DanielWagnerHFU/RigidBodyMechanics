@@ -24,10 +24,7 @@ public class RigidBodyStartsFallingHandler implements Runnable {
 	public void run() {
 		System.out.println("Start Flying");
 		rb.state = BodyState.FLYING;
-		rb.a.set(0, rb.g);
-//		rb.r.y +=0.01;
-//		rb.v.y += 0.5;
-		
+		rb.a.set(0, rb.g);		
 
 		if (Polygon.class.isAssignableFrom(rb.shape.getClass())) {
 			double edgeLength = rb.slidingEdge.abs();
@@ -47,7 +44,7 @@ public class RigidBodyStartsFallingHandler implements Runnable {
 			}
 		} else {
 			// Circle
-			rb.r.y += 0.01;
+			rb.v.y = 0.1;
 		}
 
 	}
