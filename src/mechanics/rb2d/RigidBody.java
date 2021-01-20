@@ -153,6 +153,11 @@ public class RigidBody {
 			a.set(0, 0);
 			omega = 0;
 			alpha = 0;
+			Fg.set(0,0);
+			Fh.set(0,0);
+			Fr.set(0,0);
+			Fn.set(0,0);
+			Fhr.set(0,0);
 			direction = BodyDirection.NONE;
 		}
 
@@ -169,7 +174,6 @@ public class RigidBody {
 			if (Fn.abs() * friction >= Fh.abs() && v.abs() < 0.01) {
 				state = BodyState.STOPPED;
 				System.out.println("Rigid Body " + uid + " stopped");
-
 			}
 		}
 		if (state == BodyState.ROLLING || state == BodyState.SLIDING) {

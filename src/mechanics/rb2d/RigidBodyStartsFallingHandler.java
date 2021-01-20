@@ -44,7 +44,7 @@ public class RigidBodyStartsFallingHandler implements Runnable {
 			}
 		} else {
 			// Circle
-			rb.v.y = 0.1;
+			rb.v.y += 0.1;
 		}
 
 	}

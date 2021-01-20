@@ -113,11 +113,18 @@ public class RigidBodyCollisionHandler implements Runnable {
 				System.out.println("v kleiner");
 				if (linesAreParallel(ip, rb_p)) {
 					System.out.println("Para");
-					startSliding(rb_p, collisionEdge);
-					return;
+					if (Math.abs(V1r.x) + Math.abs(V2r.x) < 0.01) {
+						System.out.println("stopping");
+						rb_p.state = BodyState.STOPPED;
+						rb_e.state = BodyState.STOPPED;
+						return;
+					} else {
+						startSliding(rb_p, collisionEdge);
+						return;
+					}
 				} else {
 					System.out.println("nocht para");
-					rb_p.v.y += 0.5;
+					rb_p.v.y += 0.3;
 					if (rb_p.r.x > ip.impactPoint.x) {
 						System.out.println("A");
 						rb_p.omega = -1;
@@ -132,7 +139,7 @@ public class RigidBodyCollisionHandler implements Runnable {
 //				double Ekin_before = getEkinErot(rb_p.m, V1r.abs());
 //				double Erot_before = getEkinErot(rb_p.I, rb_p.omega);
 
-				V1r.x += 0.0001;
+				V1r.x += 0.15;
 
 //				double Ekin_after = getEkinErot(rb_p.m, V1r.abs());
 //				
@@ -144,13 +151,6 @@ public class RigidBodyCollisionHandler implements Runnable {
 			}
 		}
 //		}
-
-		if (Math.abs(V1r.x) + Math.abs(V2r.x) < 0.01) {
-			System.out.println("stopping");
-			rb_p.state = BodyState.STOPPED;
-			rb_e.state = BodyState.STOPPED;
-			return;
-		}
 
 		double Omega1 = rb_p.omega + ((a1 * Fx) / rb_p.I);
 		double Omega2 = rb_e.omega - ((a2 * Fx) / rb_e.I);
