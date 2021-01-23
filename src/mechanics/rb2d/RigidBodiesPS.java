@@ -29,7 +29,9 @@ public class RigidBodiesPS extends PhysicalSystem {
 //		presentation_rolling_2cirlce();
 //		presentation_sliging_1polygon();
 //		presentation_sliging_2polygon();
-		presentation_mix();
+//		presentation_mix();
+//		test_random();
+		test7();
 	}
 	
 	private void presentation_mix() {
@@ -333,16 +335,16 @@ public class RigidBodiesPS extends PhysicalSystem {
 
 	private void test_random() {
 		List<RigidBody> rigidBodies = new ArrayList<RigidBody>();
-		rigidBodies.add(new RigidBody(Double.MAX_VALUE, new Vector2D(0, 0), new Vector2D(0, 0), new Vector2D(0, 0),
-				Double.MAX_VALUE, 0, 0, 0, false, new Rectangle(10.5, 1)));
+		rigidBodies.add(new RigidBody(Double.MAX_VALUE, new Vector2D(0, -5), new Vector2D(0, 0), new Vector2D(0, 0),
+				Double.MAX_VALUE, 0.1, 0, 0, false, new Rectangle(15, 1)));
 		MyRandom random = new MyRandom();
-		while (rigidBodies.size() < 2) {
-			AbstractShape shape = RandomPolygonBuilder.getPolygon((int) random.getNextHalfNormalDistribution(3, 4));
+		while (rigidBodies.size() < 8) {
+			AbstractShape shape = RandomPolygonBuilder.getPolygon((int) random.getNextHalfNormalDistribution(5, 4));
 			RigidBody rb = new RigidBody(shape, 1, new Vector2D(0, 4), new Vector2D(-1.5, 0), new Vector2D(0, -9), 0, 0,
 					0);
 
 			while (rbIntersects(rb, rigidBodies)) {
-				rb.r.set(random.nextGaussian(2.2), random.nextGaussian(1.5));
+				rb.r.set(random.nextGaussian(5), random.nextGaussian(1));
 			}
 			rigidBodies.add(rb);
 		}
@@ -651,7 +653,7 @@ public class RigidBodiesPS extends PhysicalSystem {
 		mTVG.showFn = false;
 		mTVG.maxArrowLength = 300;
 		
-		mTVG.scalesStyle.visible = true;
+		mTVG.scalesStyle.visible = false;
 		g.addTVG(mTVG);
 	}
 

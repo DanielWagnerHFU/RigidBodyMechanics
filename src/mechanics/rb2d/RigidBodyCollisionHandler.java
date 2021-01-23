@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 public class RigidBodyCollisionHandler implements Runnable {
 
-	private double k = 0.6;
+	private double k = 1;
 	private RigidBody rb_p;
 	private RigidBody rb_e;
 	private Impactpoint ip;
@@ -38,21 +38,21 @@ public class RigidBodyCollisionHandler implements Runnable {
 		rb_p.state = BodyState.FLYING;
 		rb_e.state = BodyState.FLYING;
 
-		if (rb_p.g != 0) {
-			rb_p.Fh.set(0, 0);
-			rb_p.Fn.set(0, 0);
-			rb_p.Fr.set(0, 0);
-			rb_p.Fres.set(0, 0);
-			rb_p.a.set(0, rb_p.g);
-		}
-
-		if (rb_e.g != 0) {
-			rb_e.Fh.set(0, 0);
-			rb_e.Fn.set(0, 0);
-			rb_e.Fr.set(0, 0);
-			rb_e.Fres.set(0, 0);
-			rb_e.a.set(0, rb_e.g);
-		}
+//		if (rb_p.g != 0) {
+//			rb_p.Fh.set(0, 0);
+//			rb_p.Fn.set(0, 0);
+//			rb_p.Fr.set(0, 0);
+//			rb_p.Fres.set(0, 0);
+//			rb_p.a.set(0, rb_p.g);
+//		}
+//
+//		if (rb_e.g != 0) {
+//			rb_e.Fh.set(0, 0);
+//			rb_e.Fn.set(0, 0);
+//			rb_e.Fr.set(0, 0);
+//			rb_e.Fres.set(0, 0);
+//			rb_e.a.set(0, rb_e.g);
+//		}
 
 		if (showInfo) {
 			System.out.println("Collision between:");

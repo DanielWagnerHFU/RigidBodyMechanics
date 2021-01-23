@@ -126,7 +126,7 @@ public class RigidBody {
 
 	public RigidBody(AbstractShape shape, double m, Vector2D r, Vector2D v, Vector2D a, double phi, double omega,
 			double alpha) {
-		this(m, r, v, a, shape.getI(m), phi, omega, alpha, true, shape, 0.5, 0.4);
+		this(m, r, v, a, shape.getI(m), phi, omega, alpha, true, shape, 0.2, 0.1);
 	}
 
 	public RigidBody(AbstractShape shape, double m, Vector2D r, Vector2D v, Vector2D a, double phi, double omega,
@@ -157,7 +157,7 @@ public class RigidBody {
 //			Fh.set(0,0);
 //			Fr.set(0,0);
 			Fn.set(0,0);
-			Fhr.set(0,0);
+//			Fhr.set(0,0);
 			direction = BodyDirection.NONE;
 		}
 
@@ -218,7 +218,7 @@ public class RigidBody {
 	public void startFalling(RigidBody rb, Impactpoint ip, AfterEventDescription aed) {
 		double delta = 0;
 		if (Polygon.class.isAssignableFrom(this.shape.getClass()))
-			delta = 0.5;
+			delta = 0.1;
 		else if (Polygon.class.isAssignableFrom(this.shape.getClass()))
 			delta = 0.5;
 		if (rb.lastImpactEdge.x1 != rb.lastImpactEdge.x2) {
