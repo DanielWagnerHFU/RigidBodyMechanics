@@ -210,7 +210,7 @@ public class RigidBody {
 			Vector2D trueImpactEdge = new Vector2D(impactEdge.x2 - impactEdge.x1, impactEdge.y2 - impactEdge.y1);
 			Vector2D impactPoint = VectorMath.footOfPerpendicular(this.r, new Vector2D(impactEdge.x1, impactEdge.y1),
 					trueImpactEdge);
-
+			;
 			return new Impactpoint(impactPoint, trueImpactEdge, this, r2);
 
 		} else if (Polygon.class.isAssignableFrom(this.shape.getClass())
