@@ -19,7 +19,6 @@ public class MechanicsTVG extends TVG {
 	public Structure structure;
 	private ArrayList<DrawableComponent2D> drawableComponentList = new ArrayList<DrawableComponent2D>();
 
-	@SuppressWarnings("unchecked")
 	public MechanicsTVG(PhysicalSystem ps, Structure structure, Recorder recorder) {
 		this.physicalSystem = ps;
 		this.recorder = recorder;
@@ -36,9 +35,20 @@ public class MechanicsTVG extends TVG {
 		scalesStyle.y.showMinorGridLines = true;
 		
 		for (StructureElement structureElement : structure.getSubstructures()) {
-			if (structureElement.getType().isAssignableFrom(RigidBody.class)) {
-				drawableComponentList.add(new RigidBodyDC2D(this, structureElement.getName(), (RigidBody) structureElement.getObject()));
+			System.out.println(IDrawable.class.isAssignableFrom(structureElement.getType()));
+			if (IDrawable.class.isAssignableFrom(structureElement.getType())) {
+				drawableComponentList.add(new DrawableComponent2D(this, structureElement.getName(), (IDrawable) structureElement.getObject()));
 			}
 		}
+	}
+	
+	@Override
+	public void paint() {
+		beginClipping();
+		style.useUCS = true;
+		for (DrawableComponent2D dc : drawableComponentList) {
+			dc.paint();
+		}
+		endClipping();
 	}
 }

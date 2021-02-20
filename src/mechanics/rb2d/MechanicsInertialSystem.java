@@ -12,6 +12,8 @@ public class MechanicsInertialSystem extends PhysicalSystem {
 	public double energy;
 
 	public MechanicsInertialSystem() {
+		rigidBodyArray = new RigidBody[1];
+		rigidBodyArray[0] = new RigidBody();
 	}
 
 	@Override
